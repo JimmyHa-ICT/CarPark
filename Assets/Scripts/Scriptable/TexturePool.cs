@@ -6,4 +6,6 @@ using UnityEngine;
 public class TexturePool : ScriptableObject
 {
     public Sprite[] SpriteGear;
+
+    public Sprite steer;
 }

@@ -15,3 +15,4 @@ MonoBehaviour:
   SpriteGear:
   - {fileID: 21300000, guid: fcbb9aaa2e6ec7b4cb18922d34ebcaab, type: 3}
   - {fileID: 21300000, guid: c73f5def6e2eedc4b8d14e0d2683cc93, type: 3}
+  steer: {fileID: 21300000, guid: 146f67eaf23652a4f9658bf6d35286d0, type: 3}
