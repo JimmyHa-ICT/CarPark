@@ -14,12 +14,12 @@ public class PositionLogger : MonoBehaviour
         width = collider.size.x;
         height = collider.size.y;
         Data = $"{width} {height}\n";
-        Data += JsonUtility.ToJson(transform.position) + "\n";
+        Data += JsonUtility.ToJson(transform.position) + " " + JsonUtility.ToJson(transform.eulerAngles) + "\n";
     }
 
     public void LogPosition()
     {
-        Data += JsonUtility.ToJson(transform.position) + "\n";
+        Data += JsonUtility.ToJson(transform.position) + " " + JsonUtility.ToJson(transform.eulerAngles) + "\n";
     }
 
     public void LogWinLose(int state)
