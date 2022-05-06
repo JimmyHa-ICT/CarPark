@@ -11,11 +11,15 @@ public class CarController : MonoBehaviour
 
     public float steer = 0;
     public SteeringWheel SteeringWheel;
+
+    [HideInInspector] public PositionLogger PositionLogger;
     
     void Start()
     {
         carRb = GetComponent<Rigidbody2D>();
+        PositionLogger = GetComponent<PositionLogger>();
         CanvasManager.SharedInstance.SetGearImage(fwMode);
+        steer = transform.eulerAngles.z;
     }
 
     private void Update()
@@ -35,6 +39,9 @@ public class CarController : MonoBehaviour
         KillOrthoVelocity();
 
         Steer();
+
+        if (carRb.velocity.magnitude > 0 && Time.frameCount % 10 == 0)
+            PositionLogger.LogPosition();
     }
 
     public void Throtte()
@@ -45,8 +52,7 @@ public class CarController : MonoBehaviour
 
     public void Steer()
     {
-        //steer += Input.GetAxis("Horizontal") * 90 * Time.deltaTime * (carRb.velocity.magnitude * 0.1f);
-        steer = SteeringWheel.Angle * (carRb.velocity.magnitude * 0.1f);
+        steer += SteeringWheel.SteerInput * 180 * Time.deltaTime * (carRb.velocity.magnitude * 0.1f);
         carRb.MoveRotation(steer);
     }    
 
@@ -61,6 +67,6 @@ public class CarController : MonoBehaviour
         Vector2 forwardVel = transform.right * Vector2.Dot(carRb.velocity, transform.right);
         Vector2 othorVel = transform.up * Vector2.Dot(carRb.velocity, transform.up);
 
-        carRb.velocity = forwardVel + othorVel * 0.94f;
+        carRb.velocity = forwardVel + othorVel * 0.95f;
     }    
 }
