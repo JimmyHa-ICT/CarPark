@@ -65,5 +65,7 @@ public class SteeringWheel : MonoBehaviour, IDragHandler, IPointerDownHandler, I
         currentAngle = Mathf.MoveTowards(currentAngle, 0, damping * Time.deltaTime);
         transform.eulerAngles = new Vector3(0, 0, currentAngle);
         SteerInput = currentAngle / BOUND;
+        if (MobileInputSender.Instance != null)
+            MobileInputSender.Instance.Steering = SteerInput;
     }
 }

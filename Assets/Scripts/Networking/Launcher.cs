@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
-public class MobileLauncher : MonoBehaviourPunCallbacks
+public class Launcher : MonoBehaviourPunCallbacks
 {
     void Start()
     {

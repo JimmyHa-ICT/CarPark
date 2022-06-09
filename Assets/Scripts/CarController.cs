@@ -18,23 +18,37 @@ public class CarController : MonoBehaviour
     {
         carRb = GetComponent<Rigidbody2D>();
         PositionLogger = GetComponent<PositionLogger>();
-        CanvasManager.SharedInstance.SetGearImage(fwMode);
+        //CanvasManager.SharedInstance.SetGearImage(fwMode);
         steer = transform.eulerAngles.z;
     }
 
     private void Update()
     {
-        if (Input.GetKey(KeyCode.Space))
+        //if (Input.GetKey(KeyCode.Space))
+        //{
+        //    Throtte();
+        //}
+        //if (Input.GetKey(KeyCode.C))
+        //    Brake();
+        //if (Input.GetKeyDown(KeyCode.R))
+        //{
+        //    fwMode = -fwMode;
+        //    //CanvasManager.SharedInstance.SetGearImage(fwMode);
+        //}
+
+        if (MobileInputSender.Instance == null)
+            return;
+
+        if (MobileInputSender.Instance.Throttle == 1)
         {
             Throtte();
         }
-        if (Input.GetKey(KeyCode.C))
-            Brake();
-        if (Input.GetKeyDown(KeyCode.R))
+        if (MobileInputSender.Instance.Brake == 1)
         {
-            fwMode = -fwMode;
-            CanvasManager.SharedInstance.SetGearImage(fwMode);
+            Brake();
         }
+
+        fwMode = MobileInputSender.Instance.Gear;
 
         KillOrthoVelocity();
 
@@ -52,7 +66,7 @@ public class CarController : MonoBehaviour
 
     public void Steer()
     {
-        steer += SteeringWheel.SteerInput * 180 * Time.deltaTime * (carRb.velocity.magnitude * 0.1f);
+        steer += MobileInputSender.Instance.Steering * 180 * Time.deltaTime * (carRb.velocity.magnitude * 0.1f);
         carRb.MoveRotation(steer);
     }    
 
