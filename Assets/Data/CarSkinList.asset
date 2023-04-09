@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5dd730a8f4908649bb19f516289422f, type: 3}
+  m_Name: CarSkinList
+  m_EditorClassIdentifier: 
+  Skins:
+  - {fileID: 21300000, guid: 37d06a41c97d7ba47ba7b23d18593c46, type: 3}
+  - {fileID: 21300000, guid: 1693813eee26c8b469ec30b48557de1c, type: 3}
+  - {fileID: 21300000, guid: 0d6ccc755f0b7464dbfe5ddafabb884c, type: 3}
+  - {fileID: 21300000, guid: cf9f64fb7995c03469df1872ceddb7d0, type: 3}
+  - {fileID: 21300000, guid: ecd1dc102421af04a932246b131ac228, type: 3}
+  - {fileID: 21300000, guid: 4629b2c2bcf8e5d4a8160e8f088a4f46, type: 3}
+  - {fileID: 21300000, guid: 8e2f723e330ac8f47a04e848e73d46d5, type: 3}

@@ -18,9 +18,9 @@ public class DontDestroy : MonoBehaviour
 			instance = this;
 			DontDestroyOnLoad(gameObject);
 		}
-		else if (instance != this)
-		{
-			Destroy(gameObject);
-		}
+		//else if (instance != this)
+		//{
+		//	Destroy(gameObject);
+		//}
 	}
 }
