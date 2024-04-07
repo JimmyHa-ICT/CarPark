@@ -9,10 +9,10 @@ public class CarController : MonoBehaviourPun
     private Rigidbody2D carRb;
     [SerializeField] private int force;
     [SerializeField] private float angularVelocity;
-    private int fwMode = 1;
-
+    public int fwMode = 1;
+    
     public float steer = 0;
-
+    public float Velocity => carRb.velocity.magnitude;
     [HideInInspector] public PositionLogger PositionLogger;
    
 
@@ -30,48 +30,7 @@ public class CarController : MonoBehaviourPun
         {
             return;
         }
-
-        if (Input.GetKey(KeyCode.Space))
-        {
-            Throtte();
-        }
-        if (Input.GetKey(KeyCode.C))
-            Brake();
-
-        //if (MobileInputSender.Instance == null)
-        //    return;
-
-        //if (MobileInputSender.Instance.Throttle == 1)
-        //{
-        //    Throtte();
-        //}
-        //if (MobileInputSender.Instance.Brake == 1)
-        //{
-        //    Brake();
-        //}
-
-        //fwMode = MobileInputSender.Instance.Gear;
-
         KillOrthoVelocity();
-
-        Steer();
-
-        //if (carRb.velocity.magnitude > 0 && Time.frameCount % 10 == 0)
-        //    PositionLogger.LogPosition();
-    }
-
-    private void Update()
-    {
-        if (!photonView.IsMine)
-        {
-            return;
-        }
-
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            fwMode = -fwMode;
-            //CanvasManager.SharedInstance.SetGearImage(fwMode);
-        }
     }
 
     public void Throtte()
@@ -80,12 +39,11 @@ public class CarController : MonoBehaviourPun
         carRb.AddForce(transform.right * force * fwMode, ForceMode2D.Force);
     }
 
-    public void Steer()
+    public void Steer(float angle)
     {
-        steer += Input.GetAxis("Horizontal") * angularVelocity * Time.deltaTime * (carRb.velocity.magnitude * 0.1f);
-        //steer += MobileInputSender.Instance.Steering * angularVelocity * Time.deltaTime * (carRb.velocity.magnitude * 0.1f);
+        steer += Mathf.Lerp(-1, 1, (angle + 3) / 6) * angularVelocity * Time.deltaTime * (carRb.velocity.magnitude * 0.1f);
         carRb.MoveRotation(steer);
-    }    
+    }
 
     public void Brake()
     {
