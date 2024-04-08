@@ -50,11 +50,16 @@ namespace Carpark.AI.Agent
             path = new List<Vector3>();
             Segment currentEdge;
             path.Add(FindNearestWayToGraph(out currentEdge));
-            path.Add(currentEdge.end.position);
-            path.Add(RoadWaypoints.Instance.Waypoints[2].position);
-            path.Add(RoadWaypoints.Instance.Waypoints[3].position);
-            path.Add(RoadWaypoints.Instance.Waypoints[4].position);
-            //RoadWaypoints.Instance.BFS(currentEdge.end, RoadWaypoints.Instance.OutDestination);
+            //path.Add(currentEdge.end.position);
+            //path.Add(RoadWaypoints.Instance.Waypoints[2].position);
+            //path.Add(RoadWaypoints.Instance.Waypoints[3].position);
+            //path.Add(RoadWaypoints.Instance.Waypoints[4].position);
+
+            var wayponts = RoadWaypoints.Instance.BFS(currentEdge.end, RoadWaypoints.Instance.OutDestination);
+            for (int i = 0; i < wayponts.Count; i++)
+            {
+                path.Add(wayponts[i].position);
+            }
         }
 
         private Vector3 FindNearestWayToGraph(out Segment edge)
@@ -129,6 +134,8 @@ namespace Carpark.AI.Agent
         public void ChangeDestination()
         {
             milestone = destination;
+            if (path.Count == 0)
+                return;
             path.RemoveAt(0);
             if (path.Count == 0)
                 return;
