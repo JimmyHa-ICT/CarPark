@@ -48,7 +48,7 @@ public class CarController : MonoBehaviourPun
     public void Brake()
     {
         if (carRb.velocity.magnitude > 0)
-            carRb.AddForce(-carRb.velocity.normalized * force, ForceMode2D.Force);
+            carRb.AddForce(-carRb.velocity.normalized * force * 2f, ForceMode2D.Force);
     }
 
     private void KillOrthoVelocity()

@@ -149,16 +149,16 @@ namespace Carpark.AI.Agent
             isReversing = false;
         }
 
-        private RaycastHit2D CheckObscuring()
+        public RaycastHit2D CheckObscuring()
         {
             Debug.DrawRay(transform.position + transform.up * 0.27f + m_controller.fwMode * transform.right * 1.5f, m_controller.fwMode * transform.right * 2, Color.red);
             Debug.DrawRay(transform.position - transform.up * 0.27f + m_controller.fwMode * transform.right * 1.5f, m_controller.fwMode * transform.right * 2, Color.red);
             var right = Physics2D.Raycast(transform.position + transform.up * 0.27f + m_controller.fwMode * transform.right * 1.5f,
-                                          m_controller.fwMode * transform.right * 1.5f,
+                                          m_controller.fwMode * transform.right * 2,
                                           1,
                                           LayerMask.GetMask("Cars", "Human", "Default"));
             var left = Physics2D.Raycast(transform.position - transform.up * 0.27f + m_controller.fwMode * transform.right * 1.5f,
-                                         m_controller.fwMode * transform.right * 1.5f,
+                                         m_controller.fwMode * transform.right * 2,
                                          1,
                                          LayerMask.GetMask("Cars", "Human", "Default"));
 

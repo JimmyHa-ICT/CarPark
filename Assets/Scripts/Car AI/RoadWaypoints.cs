@@ -124,8 +124,8 @@ namespace Carpark.AI.Waypoint
 
             pathList.Insert(0, startId);
 
-            for (int i = 0; i < pathList.Count; i++)
-                Debug.Log(pathList[i]);
+            //for (int i = 0; i < pathList.Count; i++)
+            //    Debug.Log(pathList[i]);
             return pathList;
         }
 
