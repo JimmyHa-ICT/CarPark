@@ -51,6 +51,7 @@ public class Launcher : MonoBehaviourPunCallbacks
     {
         PhotonNetwork.LocalPlayer.NickName = UiController.Instance.UILobby.usernameInput.text;
         PhotonNetwork.JoinRandomOrCreateRoom();
+        //PhotonNetwork.JoinOrCreateRoom(roomname);   // get room name from server response
     }
 
     public static void ExitRoom()

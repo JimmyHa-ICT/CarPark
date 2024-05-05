@@ -23,7 +23,19 @@ public class Server : MonoBehaviour
 
 	WWWForm form;
 
-	public void OnLoginButtonClicked ()
+	public static Server Instance;
+	public string UserName => user.text;
+
+
+    private void Awake()
+    {
+		if (Instance == null)
+			Instance = this;
+		else if (Instance != this)
+			Destroy(gameObject);
+    }
+
+    public void OnLoginButtonClicked ()
 	{
 		loginButton.interactable = false;
 		progressCircle.SetActive (true);
