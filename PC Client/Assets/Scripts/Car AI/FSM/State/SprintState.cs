@@ -24,7 +24,7 @@ namespace Carpark.AI.FSM
                 Debug.Log("Brake");
                 m_controller.Brake();
             }
-            else
+            else if (m_controller.Velocity < 4f)
                 m_controller.Throtte();
         }
     }

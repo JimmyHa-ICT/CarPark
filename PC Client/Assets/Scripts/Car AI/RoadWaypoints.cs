@@ -11,6 +11,7 @@ namespace Carpark.AI.Waypoint
         public Segment[] Edges;
 
         public Transform OutDestination;
+        public Transform InGate;
 
         public static RoadWaypoints Instance;
 

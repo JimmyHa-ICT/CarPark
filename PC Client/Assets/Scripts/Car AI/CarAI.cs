@@ -10,12 +10,14 @@ namespace Carpark.AI.Agent
     public class CarAI : MonoBehaviour
     {
         private CarController m_controller;
-        public Vector3 destination;
-        public Vector3 milestone;
+        [HideInInspector] public Vector3 destination;
+        [HideInInspector] public Vector3 milestone;
         private List<Vector3> path;
 
         private bool isChangingDestination = false;
         private bool isReversing = false;
+
+        private Vector3 parkPosition;
 
         public FSM.FSM FSM;
 
@@ -31,7 +33,10 @@ namespace Carpark.AI.Agent
             dribbleState.Transitions.Add(new SprintTransition(sprintState, this));
             List<BaseState> states = new List<BaseState>() { sprintState, dribbleState };
             FSM = new FSM.FSM(states);
-            GetPathOutTParkingLot();
+            parkPosition = transform.position;
+            //GetPathOutTParkingLot();
+            GetPathInParkingLot();
+            transform.position = RoadWaypoints.Instance.InGate.position;
             destination = path[0];
         }
 
@@ -50,16 +55,26 @@ namespace Carpark.AI.Agent
             path = new List<Vector3>();
             Segment currentEdge;
             path.Add(FindNearestWayToGraph(out currentEdge));
-            //path.Add(currentEdge.end.position);
-            //path.Add(RoadWaypoints.Instance.Waypoints[2].position);
-            //path.Add(RoadWaypoints.Instance.Waypoints[3].position);
-            //path.Add(RoadWaypoints.Instance.Waypoints[4].position);
 
             var wayponts = RoadWaypoints.Instance.BFS(currentEdge.end, RoadWaypoints.Instance.OutDestination);
             for (int i = 0; i < wayponts.Count; i++)
             {
                 path.Add(wayponts[i].position);
             }
+        }
+
+        private void GetPathInParkingLot()
+        {
+            path = new List<Vector3>();
+            Segment edge;
+            Vector3 nearest = FindNearestWayToGraph(out edge);
+            var waypoints = RoadWaypoints.Instance.BFS(RoadWaypoints.Instance.InGate, edge.begin);
+            for (int i = 0; i < waypoints.Count; i++)
+            {
+                path.Add(waypoints[i].position);
+            }
+            path.Add(nearest);
+            path.Add(parkPosition);
         }
 
         private Vector3 FindNearestWayToGraph(out Segment edge)

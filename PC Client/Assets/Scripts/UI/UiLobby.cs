@@ -10,7 +10,8 @@ public class UiLobby : UiBase
 
     private void Awake()
     {
-        usernameInput.text = "User" + Random.Range(1000, 10000);
+        //usernameInput.text = "User" + Random.Range(1000, 10000);
+        usernameInput.text = Server.Instance.UserName;
     }
 
     // Start is called before the first frame update
