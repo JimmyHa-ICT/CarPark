@@ -12,12 +12,12 @@ namespace Carpark.AI.Agent
         private CarController m_controller;
         [HideInInspector] public Vector3 destination;
         [HideInInspector] public Vector3 milestone;
-        private List<Vector3> path;
+        [SerializeField] private List<Vector3> path;
 
         private bool isChangingDestination = false;
         private bool isReversing = false;
 
-        private Vector3 parkPosition;
+        public Vector3 parkPosition;
 
         public FSM.FSM FSM;
 
@@ -28,15 +28,21 @@ namespace Carpark.AI.Agent
 
             var sprintState = new SprintState(m_controller);
             var dribbleState = new DribbleState(m_controller);
+            var stopState = new StopState(m_controller);
+            var parkState = new ParkState(m_controller);
 
             sprintState.Transitions.Add(new DribbleTransition(dribbleState, this));
             dribbleState.Transitions.Add(new SprintTransition(sprintState, this));
+            sprintState.Transitions.Add(new StopTransition(stopState, this));
+            stopState.Transitions.Add(new ParkTransition(parkState, this));
+
             List<BaseState> states = new List<BaseState>() { sprintState, dribbleState };
             FSM = new FSM.FSM(states);
             parkPosition = transform.position;
             //GetPathOutTParkingLot();
             GetPathInParkingLot();
             transform.position = RoadWaypoints.Instance.InGate.position;
+            transform.right = Vector3.Normalize(path[1] - transform.position);
             destination = path[0];
         }
 
@@ -71,6 +77,7 @@ namespace Carpark.AI.Agent
             var waypoints = RoadWaypoints.Instance.BFS(RoadWaypoints.Instance.InGate, edge.begin);
             for (int i = 0; i < waypoints.Count; i++)
             {
+                Debug.Log(waypoints[i]);
                 path.Add(waypoints[i].position);
             }
             path.Add(nearest);
@@ -96,54 +103,6 @@ namespace Carpark.AI.Agent
             }
             //pos = RoadWaypointsHelper.FindNearestPointOnLine(edges[0], transform.position);
             return pos;
-        }
-
-        private void MoveTowardDestination(Vector3 destination)
-        {
-            if (CheckObscuring().collider != null)
-            {
-                Debug.Log("Stop");
-                m_controller.Brake();
-                if (!isReversing)
-                {
-                    isReversing = true;
-                    DOVirtual.DelayedCall(1f, Reverse).OnComplete(() => DOVirtual.DelayedCall(2f, Reverse));
-                }
-                return;
-            }
-
-            Vector2 direction = destination - transform.position;
-            float angle = Vector2.SignedAngle(transform.right, direction);
-            isChangingDestination = angle > 3 || angle < -3;
-            m_controller.Steer(angle);
-
-            if (Vector2.SqrMagnitude(transform.position - destination) <= 10f)
-            {
-                m_controller.Brake();
-                if (!isChangingDestination)
-                {
-                    ChangeDestination();
-                    isChangingDestination = true;
-                }
-                return;
-            }
-            else
-            {
-                if (!isChangingDestination)
-                {
-                    m_controller.Throtte();
-                }
-                else
-                {
-                    if (m_controller.Velocity < 1f)
-                        m_controller.Throtte();
-                    else
-                        m_controller.Brake();
-                }
-            }
-
-            //transform.right = Vector3.Normalize(destination - transform.position);
-            m_controller.Throtte();
         }
 
         public void ChangeDestination()

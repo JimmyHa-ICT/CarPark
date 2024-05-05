@@ -5,7 +5,6 @@ using Carpark.AI.Agent;
 
 namespace Carpark.AI.FSM
 {
-
     public class DribbleState : BaseState
     {
         private Vector3 destination;
