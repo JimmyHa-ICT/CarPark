@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: TexturePool
   m_EditorClassIdentifier: 
   SpriteGear:
-  - {fileID: 21300000, guid: fcbb9aaa2e6ec7b4cb18922d34ebcaab, type: 3}
-  - {fileID: 21300000, guid: c73f5def6e2eedc4b8d14e0d2683cc93, type: 3}
-  steer: {fileID: 21300000, guid: 146f67eaf23652a4f9658bf6d35286d0, type: 3}
+  - {fileID: 21300000, guid: c4bd49bdf2174bb4f9288226554f29e6, type: 3}
+  - {fileID: 21300000, guid: d46857f9679ca8d40bb93cac621a4eab, type: 3}
+  steer: {fileID: 21300000, guid: 552e3ba33c5bd2d4bb850b24d8edc653, type: 3}
