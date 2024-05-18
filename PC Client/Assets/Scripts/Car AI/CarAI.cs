@@ -42,7 +42,7 @@ namespace Carpark.AI.Agent
             //GetPathOutTParkingLot();
             GetPathInParkingLot();
             transform.position = RoadWaypoints.Instance.InGate.position;
-            transform.right = Vector3.Normalize(path[1] - transform.position);
+            transform.eulerAngles = new Vector3(0, 0, 180);
             destination = path[0];
         }
 

@@ -16,6 +16,12 @@ namespace Carpark.AI.FSM
             carAI = m_controller.GetComponent<CarAI>();
         }
 
+        public override void OnEnter()
+        {
+            base.OnEnter();
+            Debug.Log(m_controller.transform.eulerAngles);
+        }
+
         public override void OnUpdate()
         {
             base.OnUpdate();

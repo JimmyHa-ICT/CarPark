@@ -26,7 +26,8 @@ namespace Carpark.AI.FSM
 
         public bool IsValid()
         {
-            return Vector2.SqrMagnitude(carAI.transform.position - carAI.transform.right * 3.5f - nearest) <= 0.1f;
+            Debug.DrawLine(carAI.transform.position, nearest + carAI.transform.right * 3, Color.red);
+            return Vector2.SqrMagnitude(carAI.transform.position - carAI.transform.right * 5f - nearest) <= 0.1f;
         }
 
         public void OnTransition()

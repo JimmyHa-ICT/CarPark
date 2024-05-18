@@ -22,7 +22,7 @@ namespace Carpark.AI.FSM
         {
             base.OnEnter();
             nearest = FindNearestWayToGraph(carAI.parkPosition);
-            stopPosition = nearest + carAI.transform.right * 3.5f;
+            stopPosition = nearest + carAI.transform.right * 5f;
         }
 
         public override void OnUpdate()

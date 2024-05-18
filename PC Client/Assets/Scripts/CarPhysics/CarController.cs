@@ -11,7 +11,7 @@ public class CarController : MonoBehaviourPun
     [SerializeField] private float angularVelocity;
     public int fwMode = 1;
     
-    public float steer = 0;
+    [SerializeField] public float steer = 0;
     public float Velocity => carRb.velocity.magnitude;
     [HideInInspector] public PositionLogger PositionLogger;
    
@@ -35,12 +35,12 @@ public class CarController : MonoBehaviourPun
 
     public void Throtte()
     {
-        carRb.MoveRotation(steer);
         carRb.AddForce(transform.right * force * fwMode, ForceMode2D.Force);
     }
 
     public void Steer(float angle)
     {
+        //steer += Mathf.Lerp(-1, 1, (angle + 3) / 6) * angularVelocity * Time.deltaTime * (carRb.velocity.magnitude * 0.1f);
         steer += Mathf.Lerp(-1, 1, (angle + 3) / 6) * angularVelocity * Time.deltaTime * (carRb.velocity.magnitude * 0.1f);
         carRb.MoveRotation(steer);
     }
