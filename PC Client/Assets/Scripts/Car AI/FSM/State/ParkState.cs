@@ -27,7 +27,6 @@ namespace Carpark.AI.FSM
             direction = (nearest - carAI.parkPosition).normalized;
             Debug.Log(direction);
             rightRotation = false;
-            m_controller.steer = 180;
         }
 
         public override void OnUpdate()

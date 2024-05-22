@@ -17,7 +17,7 @@ namespace Carpark.AI.Agent
         private bool isChangingDestination = false;
         private bool isReversing = false;
 
-        public Vector3 parkPosition;
+        [HideInInspector] public Vector3 parkPosition;
 
         public FSM.FSM FSM;
 
@@ -25,6 +25,7 @@ namespace Carpark.AI.Agent
         void Start()
         {
             m_controller = GetComponent<CarController>();
+            parkPosition = transform.position;
 
             var sprintState = new SprintState(m_controller);
             var dribbleState = new DribbleState(m_controller);
@@ -38,7 +39,6 @@ namespace Carpark.AI.Agent
 
             List<BaseState> states = new List<BaseState>() { sprintState, dribbleState };
             FSM = new FSM.FSM(states);
-            parkPosition = transform.position;
             //GetPathOutTParkingLot();
             GetPathInParkingLot();
             transform.position = RoadWaypoints.Instance.InGate.position;
@@ -81,7 +81,7 @@ namespace Carpark.AI.Agent
                 path.Add(waypoints[i].position);
             }
             path.Add(nearest);
-            path.Add(parkPosition);
+            //path.Add(parkPosition);
         }
 
         private Vector3 FindNearestWayToGraph(out Segment edge)
@@ -116,6 +116,11 @@ namespace Carpark.AI.Agent
             destination = path[0];
             //DOVirtual.DelayedCall(1, () => isChangingDestination = false);
         }
+
+        public bool ReachFinalDestination()
+        {
+            return destination == path[path.Count - 1];
+        }    
 
         private void Reverse()
         {

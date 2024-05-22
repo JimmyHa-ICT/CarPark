@@ -11,12 +11,14 @@ namespace Carpark.AI.FSM
         private ParkState parkState;
         private CarAI carAI;
         private Vector3 nearest;
+        private Vector2 orientation;
 
         public ParkTransition(ParkState parkState, CarAI carAI)
         {
             this.parkState = parkState as ParkState;
             this.carAI = carAI;
             nearest = FindNearestWayToGraph(carAI.parkPosition);
+            orientation = carAI.parkPosition - nearest;
         }
 
         public BaseState GetNextState()
@@ -26,8 +28,8 @@ namespace Carpark.AI.FSM
 
         public bool IsValid()
         {
-            Debug.DrawLine(carAI.transform.position, nearest + carAI.transform.right * 3, Color.red);
-            return Vector2.SqrMagnitude(carAI.transform.position - carAI.transform.right * 5f - nearest) <= 0.1f;
+            float angle = Vector2.Angle(carAI.transform.right, -orientation);
+            return carAI.CheckObscuring().collider != null;
         }
 
         public void OnTransition()

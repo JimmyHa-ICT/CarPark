@@ -23,7 +23,7 @@ namespace Carpark.AI.FSM
 
         public bool IsValid()
         {
-            return Vector2.SqrMagnitude(carAI.transform.position - carAI.destination) <= 16f;
+            return Vector2.SqrMagnitude(carAI.transform.position - carAI.destination) <= 16f && !carAI.ReachFinalDestination();
         }
 
         public void OnTransition()

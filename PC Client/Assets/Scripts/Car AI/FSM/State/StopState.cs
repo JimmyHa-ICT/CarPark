@@ -12,6 +12,7 @@ namespace Carpark.AI.FSM
         private CarAI carAI;
         private Vector3 nearest;
         private Vector3 stopPosition;
+        private Vector3 orientation;
 
         public StopState(CarController controller) : base(controller)
         {
@@ -22,16 +23,27 @@ namespace Carpark.AI.FSM
         {
             base.OnEnter();
             nearest = FindNearestWayToGraph(carAI.parkPosition);
-            stopPosition = nearest + carAI.transform.right * 5f;
+            orientation = Vector3.Normalize(carAI.parkPosition - nearest);
+            stopPosition = nearest + carAI.transform.right * 5f ;
         }
 
         public override void OnUpdate()
         {
             base.OnUpdate();
-            if (m_controller.Velocity < 1f && Vector2.Distance(stopPosition, m_controller.transform.position) > 1)
-                m_controller.Throtte();
-            else
+            float angle = Vector2.SignedAngle(m_controller.transform.right, -orientation);
+            m_controller.Steer(angle);
+            if (carAI.CheckObscuring().collider != null)
+            {
+                Debug.Log("Brake");
                 m_controller.Brake();
+            }
+            else
+            {
+                if (m_controller.Velocity < 1f)
+                    m_controller.Throtte();
+                else
+                    m_controller.Brake();
+            }
         }
 
         private Vector3 FindNearestWayToGraph(Vector3 position)
