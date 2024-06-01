@@ -11,8 +11,11 @@ namespace Carpark.AI.FSM
     {
         private CarAI carAI;
         private Vector3 nearest;
+        private Vector2 orientation;
         private Vector2 direction;
         private bool rightRotation;
+
+        private float timeout;
 
         public ParkState(CarController controller) : base(controller)
         {
@@ -22,10 +25,10 @@ namespace Carpark.AI.FSM
         public override void OnEnter()
         {
             base.OnEnter();
-            m_controller.fwMode = -m_controller.fwMode;
-            nearest = FindNearestWayToGraph(carAI.parkPosition);
-            direction = (nearest - carAI.parkPosition).normalized;
-            Debug.Log(direction);
+            m_controller.fwMode = -1;
+            nearest = RoadWaypointsHelper.FindNearestWayToGraph(carAI.parkPosition);
+            orientation = (nearest - carAI.parkPosition).normalized;
+            Debug.Log(orientation);
             rightRotation = false;
         }
 
@@ -34,51 +37,70 @@ namespace Carpark.AI.FSM
             base.OnUpdate();
             Debug.DrawRay(m_controller.transform.position, direction, Color.blue);
             Debug.DrawRay(m_controller.transform.position, m_controller.transform.right, Color.red);
-            float angle = Vector2.SignedAngle(m_controller.transform.right, direction);
-            Debug.Log(angle);
-            //m_controller.transform.rotation = Quaternion.Slerp(m_controller.transform.rotation, Quaternion.Euler(0, 0, 90), 10 * Time.deltaTime);
-            //m_controller.transform.right = Vector3.Slerp(m_controller.transform.right, direction, 10 * Time.deltaTime);
-            if (Mathf.Abs(angle) < 0.1f)
+            if (m_controller.fwMode == -1)
             {
-                Debug.LogError("right rotation");
-                rightRotation = true;
-            }    
-            
-            if (rightRotation)
-            {
-                m_controller.Steer(0);
-                Debug.Log("Steer zero");
-            }    
-            else
-                m_controller.Steer(angle);
+                direction = m_controller.transform.position - carAI.parkPosition;
+                float angle = Vector2.SignedAngle(m_controller.transform.right, direction);
+                float angleOrientation = Vector2.SignedAngle(m_controller.transform.right, orientation);
+                //Debug.Log(angleOrientation);
 
-
-            if (!rightRotation && m_controller.Velocity < 1f)
-                m_controller.Throtte();
-            else
-                m_controller.Brake();
-        }
-
-        private Vector3 FindNearestWayToGraph(Vector3 position)
-        {
-            //Segment edge;
-            float currentDistance = Mathf.Infinity;
-            Vector3 pos = Vector3.zero;
-            var edges = RoadWaypoints.Instance.Edges;
-            //edge = edges[0];
-            for (int i = 0; i < edges.Length; i++)
-            {
-                var newpos = RoadWaypointsHelper.FindNearestPointOnLine(edges[i], position);
-                float sqrDistance = Vector2.SqrMagnitude(newpos - position);
-                if (sqrDistance < currentDistance)
+                if (Mathf.Abs(angleOrientation) < 0.4f)
                 {
-                    pos = newpos;
-                    currentDistance = sqrDistance;
-                    //edge = edges[i];
+                    Debug.LogError("right rotation");
+                    rightRotation = true;
+                }    
+            
+                if (rightRotation)
+                {
+                    m_controller.Steer(0);
+                    Debug.Log("Steer zero");
+                }    
+                else
+                    m_controller.Steer(Mathf.Clamp(angleOrientation, -3, 3));
+ 
+                if (!rightRotation && m_controller.Velocity < 1f)
+                    m_controller.Throtte();
+                else
+                    m_controller.Brake();
+
+                if (carAI.CheckObscuring(0.8f) || (Mathf.Abs(Vector2.Dot(m_controller.transform.position - carAI.parkPosition, 
+                                                        (nearest - carAI.parkPosition).normalized)) > 0.05f && rightRotation))
+                {
+                    m_controller.fwMode = 1;
+                    timeout = 2;
                 }
             }
-            //pos = RoadWaypointsHelper.FindNearestPointOnLine(edges[0], transform.position);
-            return pos;
+            else
+            {
+                timeout -= Time.deltaTime;
+                if (timeout < 0 || carAI.CheckObscuring(0.8f))
+                {
+                    m_controller.fwMode = -1;
+                }
+
+                float angleOrientation = Vector2.SignedAngle(m_controller.transform.right, orientation);
+                if (rightRotation)
+                {
+                    m_controller.Steer(0);
+                    Debug.Log("Steer zero");
+                }
+                else
+                    m_controller.Steer(Mathf.Clamp(angleOrientation, -3, 3));
+
+                float distanceAxis = Vector2.Dot(m_controller.transform.position - carAI.parkPosition,
+                                                        (nearest - carAI.parkPosition).normalized);
+                if (m_controller.Velocity < 0.6f && Mathf.Abs(distanceAxis) > 0.04f)
+                    m_controller.Throtte();
+                else
+                    m_controller.Brake();
+            }    
+        }
+
+        public override void OnExit()
+        {
+            base.OnExit();
+            m_controller.fwMode = 1;
+
         }
     }
 }

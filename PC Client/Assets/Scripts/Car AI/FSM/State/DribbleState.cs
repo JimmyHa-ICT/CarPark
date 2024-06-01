@@ -27,7 +27,7 @@ namespace Carpark.AI.FSM
             Vector2 direction = destination - m_controller.transform.position;
             float angle = Vector2.SignedAngle(m_controller.transform.right, direction);
 
-            m_controller.Steer(angle);
+            m_controller.Steer(Mathf.Clamp(angle, -3, 3));
 
             if (m_controller.Velocity < Mathf.Lerp(1.5f, 0.5f, Mathf.Abs(angle) / 90f))
                 m_controller.Throtte();

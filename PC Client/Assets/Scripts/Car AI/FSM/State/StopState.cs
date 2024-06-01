@@ -11,7 +11,6 @@ namespace Carpark.AI.FSM
     {
         private CarAI carAI;
         private Vector3 nearest;
-        private Vector3 stopPosition;
         private Vector3 orientation;
 
         public StopState(CarController controller) : base(controller)
@@ -24,7 +23,6 @@ namespace Carpark.AI.FSM
             base.OnEnter();
             nearest = FindNearestWayToGraph(carAI.parkPosition);
             orientation = Vector3.Normalize(carAI.parkPosition - nearest);
-            stopPosition = nearest + carAI.transform.right * 5f ;
         }
 
         public override void OnUpdate()

@@ -24,5 +24,24 @@ namespace Carpark.AI.Waypoint
 
             return edge.begin.position + lineHeadingVector * dotProduct;
         }
+
+        public static Vector3 FindNearestWayToGraph(Vector3 position)
+        {
+            //Segment edge;
+            float currentDistance = Mathf.Infinity;
+            Vector3 pos = Vector3.zero;
+            var edges = RoadWaypoints.Instance.Edges;
+            for (int i = 0; i < edges.Length; i++)
+            {
+                var newpos = RoadWaypointsHelper.FindNearestPointOnLine(edges[i], position);
+                float sqrDistance = Vector2.SqrMagnitude(newpos - position);
+                if (sqrDistance < currentDistance)
+                {
+                    pos = newpos;
+                    currentDistance = sqrDistance;
+                }
+            }
+            return pos;
+        }
     }
 }

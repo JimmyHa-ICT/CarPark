@@ -17,6 +17,7 @@ namespace Carpark.AI.FSM
             this.stopState = stopState as StopState;
             this.carAI = carAI;
             nearest = FindNearestWayToGraph(carAI.parkPosition);
+            nearest = carAI.parkPosition + (nearest - carAI.parkPosition).normalized * 2.5f;
         }
 
         public BaseState GetNextState()
@@ -26,7 +27,7 @@ namespace Carpark.AI.FSM
 
         public bool IsValid()
         {
-            return Vector2.SqrMagnitude(carAI.transform.position - nearest - carAI.transform.right * 3f) <= 0.1f;
+            return Vector2.SqrMagnitude(carAI.transform.position - nearest - carAI.transform.right * 1f) <= 0.1f;
         }
 
         public void OnTransition()

@@ -2,33 +2,34 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Carpark.AI.Agent;
+using Carpark.AI.Waypoint;
 
 namespace Carpark.AI.FSM
 {
-    public class SprintTransition : ITransition
+    public class ParkToStopTransition : ITransition
     {
-        private SprintState sprintState;
+        private StopState stopState;
         private CarAI carAI;
 
-        public SprintTransition(BaseState sprintState, CarAI carAI)
+        public ParkToStopTransition(BaseState stopState, CarAI carAI)
         {
-            this.sprintState = sprintState as SprintState;
+            this.stopState = stopState as StopState;
             this.carAI = carAI;
         }
 
         public BaseState GetNextState()
         {
-            return sprintState;
+            return stopState;
         }
 
         public bool IsValid()
         {
-            Vector2 path = carAI.destination - carAI.transform.position;
-            return Vector2.Angle(path, carAI.transform.right) < 0.25f;
+            return carAI.CheckObscuring(0.6f);
         }
 
         public void OnTransition()
         {
+            //throw new System.NotImplementedException();
         }
     }
 }

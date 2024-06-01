@@ -12,7 +12,7 @@ namespace Carpark.AI.Agent
         private CarController m_controller;
         [HideInInspector] public Vector3 destination;
         [HideInInspector] public Vector3 milestone;
-        [SerializeField] private List<Vector3> path;
+        [HideInInspector] public List<Vector3> Path;
 
         private bool isChangingDestination = false;
         private bool isReversing = false;
@@ -27,6 +27,26 @@ namespace Carpark.AI.Agent
             m_controller = GetComponent<CarController>();
             parkPosition = transform.position;
 
+            //GetPathOutTParkingLot();
+            var inState = new ParentState(m_controller);
+            var idleState = new IdleState(m_controller);
+            var outState = new ParentState(m_controller);
+            inState.FSM = GetFSMMoveInParkingLot();
+            outState.FSM = GetFSMMoveOutParkingLot();
+            inState.Transitions.Add(new ToIdleTransition(idleState, this));
+            idleState.Transitions.Add(new MoveOutTransition(outState, this));
+
+
+            List<BaseState> states = new List<BaseState>() { inState, idleState, outState };
+            FSM = new FSM.FSM(states);
+            GetPathInParkingLot();
+            transform.position = RoadWaypoints.Instance.InGate.position;
+            transform.eulerAngles = new Vector3(0, 0, 180);
+            destination = Path[0];
+        }
+
+        private FSM.FSM GetFSMMoveInParkingLot()
+        {
             var sprintState = new SprintState(m_controller);
             var dribbleState = new DribbleState(m_controller);
             var stopState = new StopState(m_controller);
@@ -37,51 +57,56 @@ namespace Carpark.AI.Agent
             sprintState.Transitions.Add(new StopTransition(stopState, this));
             stopState.Transitions.Add(new ParkTransition(parkState, this));
 
-            List<BaseState> states = new List<BaseState>() { sprintState, dribbleState };
-            FSM = new FSM.FSM(states);
-            //GetPathOutTParkingLot();
-            GetPathInParkingLot();
-            transform.position = RoadWaypoints.Instance.InGate.position;
-            transform.eulerAngles = new Vector3(0, 0, 180);
-            destination = path[0];
+            List<BaseState> states = new List<BaseState>() { sprintState, dribbleState, stopState, parkState };
+            var inFSM = new FSM.FSM(states);
+            return inFSM;
         }
 
-        //private void FixedUpdate()
-        //{
-        //    MoveTowardDestination(destination);
-        //}
+        private FSM.FSM GetFSMMoveOutParkingLot()
+        {
+            var sprintState = new SprintState(m_controller);
+            var dribbleState = new DribbleState(m_controller);
+
+            sprintState.Transitions.Add(new DribbleTransition(dribbleState, this));
+            dribbleState.Transitions.Add(new SprintTransition(sprintState, this));
+            List<BaseState> states = new List<BaseState>() { sprintState, dribbleState };
+            var outFSM = new FSM.FSM(states);
+            return outFSM;
+        }
 
         private void Update()
         {
             FSM.Update();
         }
 
-        private void GetPathOutTParkingLot()
+        public void GetPathOutParkingLot()
         {
-            path = new List<Vector3>();
+            Path = new List<Vector3>();
             Segment currentEdge;
-            path.Add(FindNearestWayToGraph(out currentEdge));
+            Path.Add(FindNearestWayToGraph(out currentEdge));
 
             var wayponts = RoadWaypoints.Instance.BFS(currentEdge.end, RoadWaypoints.Instance.OutDestination);
             for (int i = 0; i < wayponts.Count; i++)
             {
-                path.Add(wayponts[i].position);
+                Path.Add(wayponts[i].position);
             }
         }
 
-        private void GetPathInParkingLot()
+        public void GetPathInParkingLot()
         {
-            path = new List<Vector3>();
+            Path = new List<Vector3>();
             Segment edge;
             Vector3 nearest = FindNearestWayToGraph(out edge);
             var waypoints = RoadWaypoints.Instance.BFS(RoadWaypoints.Instance.InGate, edge.begin);
             for (int i = 0; i < waypoints.Count; i++)
             {
                 Debug.Log(waypoints[i]);
-                path.Add(waypoints[i].position);
+                Path.Add(waypoints[i].position);
             }
-            path.Add(nearest);
-            //path.Add(parkPosition);
+            var direction = (nearest - parkPosition).normalized;
+            var middle = parkPosition + direction * 2.5f + (Path[Path.Count - 1] - nearest) * 0.5f;
+            Path.Add(middle);
+            Path.Add(parkPosition + direction * 2.5f);
         }
 
         private Vector3 FindNearestWayToGraph(out Segment edge)
@@ -108,18 +133,18 @@ namespace Carpark.AI.Agent
         public void ChangeDestination()
         {
             milestone = destination;
-            if (path.Count == 0)
+            if (Path.Count == 0)
                 return;
-            path.RemoveAt(0);
-            if (path.Count == 0)
+            Path.RemoveAt(0);
+            if (Path.Count == 0)
                 return;
-            destination = path[0];
+            destination = Path[0];
             //DOVirtual.DelayedCall(1, () => isChangingDestination = false);
         }
 
         public bool ReachFinalDestination()
         {
-            return destination == path[path.Count - 1];
+            return destination == Path[Path.Count - 1];
         }    
 
         private void Reverse()
@@ -128,17 +153,17 @@ namespace Carpark.AI.Agent
             isReversing = false;
         }
 
-        public RaycastHit2D CheckObscuring()
+        public RaycastHit2D CheckObscuring(float length = 1)
         {
-            Debug.DrawRay(transform.position + transform.up * 0.27f + m_controller.fwMode * transform.right * 1.5f, m_controller.fwMode * transform.right * 2, Color.red);
-            Debug.DrawRay(transform.position - transform.up * 0.27f + m_controller.fwMode * transform.right * 1.5f, m_controller.fwMode * transform.right * 2, Color.red);
+            Debug.DrawRay(transform.position + transform.up * 0.27f + m_controller.fwMode * transform.right * 1.5f, m_controller.fwMode * transform.right * length, Color.red);
+            Debug.DrawRay(transform.position - transform.up * 0.27f + m_controller.fwMode * transform.right * 1.5f, m_controller.fwMode * transform.right * length, Color.red);
             var right = Physics2D.Raycast(transform.position + transform.up * 0.27f + m_controller.fwMode * transform.right * 1.5f,
                                           m_controller.fwMode * transform.right * 2,
-                                          1,
+                                          length,
                                           LayerMask.GetMask("Cars", "Human", "Default"));
             var left = Physics2D.Raycast(transform.position - transform.up * 0.27f + m_controller.fwMode * transform.right * 1.5f,
                                          m_controller.fwMode * transform.right * 2,
-                                         1,
+                                         length,
                                          LayerMask.GetMask("Cars", "Human", "Default"));
 
             if (right.collider == null && left.collider == null)
