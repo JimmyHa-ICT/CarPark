@@ -17,6 +17,11 @@ namespace Carpark.AI.FSM
         }
 
 
+        public void Init()
+        {
+            CurrentState = States[0];
+        }
+
         public void Update()
         {
             for (int i = 0; i < CurrentState.Transitions.Count; i++)

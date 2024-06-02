@@ -136,13 +136,6 @@ namespace Carpark.AI.Waypoint
             List<Transform> open = new List<Transform>();
             List<Transform> closed = new List<Transform>();
 
-            //float tentative_g_score = 0.0f;
-            //bool tentative_is_better;
-
-            //start.g = 0.0f;
-            //start.h = distance(start, end);
-            //start.f = start.h;
-
             open.Add(begin);
 
             while (open.Count > 0)
@@ -173,22 +166,6 @@ namespace Carpark.AI.Waypoint
                             Debug.Log(thisNode.ToString() + neighbour.ToString());
                             //tentative_is_better = true;
                         }
-                        //else if (tentative_g_score < neighbour.g)
-                        //{
-
-                        //    tentative_is_better = true;
-                        //}
-                        //else
-                        //    tentative_is_better = false;
-
-                        //if (tentative_is_better)
-                        //{
-
-                        //    neighbour.cameFrom = thisNode;
-                        //    neighbour.g = tentative_g_score;
-                        //    neighbour.h = distance(thisNode, end);
-                        //    neighbour.f = neighbour.g + neighbour.h;
-                        //}
                     }
                 }
             }

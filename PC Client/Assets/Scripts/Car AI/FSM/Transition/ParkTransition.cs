@@ -43,7 +43,7 @@ namespace Carpark.AI.FSM
                 return true;
             }
 
-            if (Vector2.Distance(carAI.transform.position, nearest) > 1f)
+            if (Vector2.Distance(carAI.transform.position, nearest) > 1.5f)
             {
                 return true;
             }

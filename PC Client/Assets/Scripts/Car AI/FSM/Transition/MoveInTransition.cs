@@ -27,16 +27,16 @@ namespace Carpark.AI.FSM
 
         public bool IsValid()
         {
-            timeOut -= Time.deltaTime;
-            return timeOut <= 0;
+            return Vector2.Distance(RoadWaypoints.Instance.OutDestination.position, carAI.transform.position) < 0.1f;
         }
 
         public void OnTransition()
         {
             timeOut = Random.Range(10, 20);
-            carAI.GetPathInParkingLot();
             carAI.transform.position = RoadWaypoints.Instance.InGate.position;
             carAI.transform.eulerAngles = new Vector3(0, 0, 180);
+            carAI.GetComponent<CarController>().Init();
+            carAI.GetPathInParkingLot();
             carAI.destination = carAI.Path[0];
         }
     }

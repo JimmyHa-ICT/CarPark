@@ -33,15 +33,16 @@ namespace Carpark.AI.Agent
             var outState = new ParentState(m_controller);
             inState.FSM = GetFSMMoveInParkingLot();
             outState.FSM = GetFSMMoveOutParkingLot();
+            outState.Transitions.Add(new MoveInTransition(inState, this));
             inState.Transitions.Add(new ToIdleTransition(idleState, this));
             idleState.Transitions.Add(new MoveOutTransition(outState, this));
 
 
-            List<BaseState> states = new List<BaseState>() { inState, idleState, outState };
+            List<BaseState> states = new List<BaseState>() { outState, idleState, inState };
             FSM = new FSM.FSM(states);
-            GetPathInParkingLot();
-            transform.position = RoadWaypoints.Instance.InGate.position;
-            transform.eulerAngles = new Vector3(0, 0, 180);
+            GetPathOutParkingLot();
+            //transform.position = RoadWaypoints.Instance.InGate.position;
+            //transform.eulerAngles = new Vector3(0, 0, 180);
             destination = Path[0];
         }
 
@@ -54,6 +55,7 @@ namespace Carpark.AI.Agent
 
             sprintState.Transitions.Add(new DribbleTransition(dribbleState, this));
             dribbleState.Transitions.Add(new SprintTransition(sprintState, this));
+            dribbleState.Transitions.Add(new StopTransition(stopState, this));
             sprintState.Transitions.Add(new StopTransition(stopState, this));
             stopState.Transitions.Add(new ParkTransition(parkState, this));
 
@@ -104,8 +106,9 @@ namespace Carpark.AI.Agent
                 Path.Add(waypoints[i].position);
             }
             var direction = (nearest - parkPosition).normalized;
-            var middle = parkPosition + direction * 2.5f + (Path[Path.Count - 1] - nearest) * 0.5f;
-            Path.Add(middle);
+            var middle = parkPosition + direction * 2.5f + (Path[Path.Count - 1] - nearest);
+            Path[Path.Count - 1] = middle;
+            //Path.Add(middle);
             Path.Add(parkPosition + direction * 2.5f);
         }
 
@@ -117,8 +120,8 @@ namespace Carpark.AI.Agent
             edge = edges[0];
             for (int i = 0; i < edges.Length; i++)
             {
-                var newpos = RoadWaypointsHelper.FindNearestPointOnLine(edges[i], transform.position);
-                float sqrDistance = Vector2.SqrMagnitude(newpos - transform.position);
+                var newpos = RoadWaypointsHelper.FindNearestPointOnLine(edges[i], parkPosition);
+                float sqrDistance = Vector2.SqrMagnitude(newpos - parkPosition);
                 if (sqrDistance < currentDistance)
                 {
                     pos = newpos;
@@ -155,16 +158,17 @@ namespace Carpark.AI.Agent
 
         public RaycastHit2D CheckObscuring(float length = 1)
         {
+            Physics2D.queriesHitTriggers = true;
             Debug.DrawRay(transform.position + transform.up * 0.27f + m_controller.fwMode * transform.right * 1.5f, m_controller.fwMode * transform.right * length, Color.red);
             Debug.DrawRay(transform.position - transform.up * 0.27f + m_controller.fwMode * transform.right * 1.5f, m_controller.fwMode * transform.right * length, Color.red);
             var right = Physics2D.Raycast(transform.position + transform.up * 0.27f + m_controller.fwMode * transform.right * 1.5f,
                                           m_controller.fwMode * transform.right * 2,
                                           length,
-                                          LayerMask.GetMask("Cars", "Human", "Default"));
+                                          LayerMask.GetMask("Cars", "Human", "Default", "Environment"));
             var left = Physics2D.Raycast(transform.position - transform.up * 0.27f + m_controller.fwMode * transform.right * 1.5f,
                                          m_controller.fwMode * transform.right * 2,
                                          length,
-                                         LayerMask.GetMask("Cars", "Human", "Default"));
+                                         LayerMask.GetMask("Cars", "Human", "Default", "Environment"));
 
             if (right.collider == null && left.collider == null)
             {

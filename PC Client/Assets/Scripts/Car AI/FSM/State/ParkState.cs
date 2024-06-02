@@ -63,9 +63,11 @@ namespace Carpark.AI.FSM
                 else
                     m_controller.Brake();
 
-                if (carAI.CheckObscuring(0.8f) || (Mathf.Abs(Vector2.Dot(m_controller.transform.position - carAI.parkPosition, 
+                var hit = carAI.CheckObscuring(0.8f);
+                if (hit || (Mathf.Abs(Vector2.Dot(m_controller.transform.position - carAI.parkPosition, 
                                                         (nearest - carAI.parkPosition).normalized)) > 0.05f && rightRotation))
                 {
+                    Debug.Log("Hit back " + hit.collider);
                     m_controller.fwMode = 1;
                     timeout = 2;
                 }

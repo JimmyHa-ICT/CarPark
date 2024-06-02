@@ -28,12 +28,14 @@ namespace Carpark.AI.FSM
         {
             nearest = RoadWaypointsHelper.FindNearestWayToGraph(carAI.parkPosition);
             var orientation = nearest - carAI.parkPosition;
-            float distanceAxis = Vector2.Dot(m_controller.transform.position - carAI.parkPosition,
+            float distanceForward = Vector2.Dot(m_controller.transform.position - carAI.parkPosition,
                                                         (nearest - carAI.parkPosition).normalized);
+            float distanceSide = Vector2.Dot(m_controller.transform.position - carAI.parkPosition,
+                                                        -Vector2.Perpendicular((nearest - carAI.parkPosition).normalized));
             float angleOrientation = Vector2.SignedAngle(m_controller.transform.right, orientation);
             //Debug.Log(angleOrientation);
-
-            if (Mathf.Abs(angleOrientation) < 0.4f && Mathf.Abs(distanceAxis) < 0.04f)
+            //Debug.Log(distanceAxis);
+            if (Mathf.Abs(angleOrientation) < 0.4f && Mathf.Abs(distanceForward) < 0.04f && Mathf.Abs(distanceSide) < 0.8f)
                 return true;
             else
                 return false;

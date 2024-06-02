@@ -22,6 +22,7 @@ public class SceneController : MonoBehaviour
             SharedInstance = this;
         else if (SharedInstance != this)
             Destroy(gameObject);
+        Application.targetFrameRate = 60;
     }
 
     public void ChangeScene(int s)
