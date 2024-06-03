@@ -57,15 +57,17 @@ namespace Carpark.AI.FSM
                 }    
                 else
                     m_controller.Steer(Mathf.Clamp(angleOrientation, -3, 3));
- 
-                if (!rightRotation && m_controller.Velocity < 1f)
+
+                float distanceAxis = Vector2.Dot(m_controller.transform.position - carAI.parkPosition,
+                                                        (nearest - carAI.parkPosition).normalized);
+                if (!rightRotation && m_controller.Velocity < 1f && distanceAxis > 0.05f)
                     m_controller.Throtte();
                 else
                     m_controller.Brake();
 
-                var hit = carAI.CheckObscuring(0.8f);
-                if (hit || (Mathf.Abs(Vector2.Dot(m_controller.transform.position - carAI.parkPosition, 
-                                                        (nearest - carAI.parkPosition).normalized)) > 0.05f && rightRotation))
+                var hit = carAI.CheckObscuring(0.7f);
+                if (hit || (Vector2.Dot(m_controller.transform.position - carAI.parkPosition, 
+                                                        (nearest - carAI.parkPosition).normalized) < -0.05f && rightRotation))
                 {
                     Debug.Log("Hit back " + hit.collider);
                     m_controller.fwMode = 1;
@@ -75,7 +77,9 @@ namespace Carpark.AI.FSM
             else
             {
                 timeout -= Time.deltaTime;
-                if (timeout < 0 || carAI.CheckObscuring(0.8f))
+                float distanceAxis = Vector2.Dot(m_controller.transform.position - carAI.parkPosition,
+                                                        (nearest - carAI.parkPosition).normalized);
+                if (timeout < 0 || carAI.CheckObscuring(0.8f) || (distanceAxis > 0.05f && rightRotation))
                 {
                     m_controller.fwMode = -1;
                 }
@@ -89,9 +93,7 @@ namespace Carpark.AI.FSM
                 else
                     m_controller.Steer(Mathf.Clamp(angleOrientation, -3, 3));
 
-                float distanceAxis = Vector2.Dot(m_controller.transform.position - carAI.parkPosition,
-                                                        (nearest - carAI.parkPosition).normalized);
-                if (m_controller.Velocity < 0.6f && Mathf.Abs(distanceAxis) > 0.04f)
+                if (m_controller.Velocity < 0.6f && Mathf.Abs(distanceAxis) > 0.05f)
                     m_controller.Throtte();
                 else
                     m_controller.Brake();
