@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: CarSkinList
   m_EditorClassIdentifier: 
   Skins:
-  - {fileID: 21300000, guid: 37d06a41c97d7ba47ba7b23d18593c46, type: 3}
   - {fileID: 21300000, guid: 1693813eee26c8b469ec30b48557de1c, type: 3}
   - {fileID: 21300000, guid: 0d6ccc755f0b7464dbfe5ddafabb884c, type: 3}
   - {fileID: 21300000, guid: cf9f64fb7995c03469df1872ceddb7d0, type: 3}

@@ -29,7 +29,7 @@ public class Launcher : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         base.OnJoinedRoom();
-        var loadScene = SceneManager.LoadSceneAsync(1, LoadSceneMode.Additive);
+        var loadScene = SceneManager.LoadSceneAsync(2, LoadSceneMode.Additive);
         loadScene.completed += LoadScene_completed;
         Debug.Log("Join a room successfully!!!");
     }
@@ -49,7 +49,7 @@ public class Launcher : MonoBehaviourPunCallbacks
 
     public static void JoinRoom()
     {
-        PhotonNetwork.LocalPlayer.NickName = UiController.Instance.UILobby.usernameInput.text;
+        PhotonNetwork.LocalPlayer.NickName = Server.Instance.UserName;
         PhotonNetwork.JoinRandomOrCreateRoom();
         //PhotonNetwork.JoinOrCreateRoom(roomname);   // get room name from server response
     }
@@ -57,7 +57,7 @@ public class Launcher : MonoBehaviourPunCallbacks
     public static void ExitRoom()
     {
         PhotonNetwork.LeaveRoom();
-        SceneManager.UnloadSceneAsync(1);
+        SceneManager.UnloadSceneAsync(2);
     }
 
     private void LoadScene_completed(AsyncOperation obj)
