@@ -50,7 +50,7 @@ public class CarController : MonoBehaviourPun
     public void Steer(float angle)
     {
         //steer += Mathf.Lerp(-1, 1, (angle + 3) / 6) * angularVelocity * Time.deltaTime * (carRb.velocity.magnitude * 0.1f);
-        Debug.Log("Steer");
+        //Debug.Log("Steer");
         steer += Mathf.Lerp(-1, 1, (angle + 3) / 6) * angularVelocity * Time.deltaTime * (carRb.velocity.magnitude * 0.1f);
         carRb.MoveRotation(steer);
     }

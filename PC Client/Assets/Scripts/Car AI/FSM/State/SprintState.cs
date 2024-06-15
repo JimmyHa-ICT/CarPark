@@ -20,7 +20,7 @@ namespace Carpark.AI.FSM
         public override void OnEnter()
         {
             base.OnEnter();
-            Debug.Log(m_controller.transform.eulerAngles);
+            //Debug.Log(m_controller.transform.eulerAngles);
             destination = carAI.destination;
         }
 
@@ -36,7 +36,7 @@ namespace Carpark.AI.FSM
             base.OnUpdate();
             if (carAI.CheckObscuring(1.5f).collider != null)
             {
-                Debug.Log("Brake");
+                //Debug.Log("Brake");
                 m_controller.Brake();
             }
             else if (m_controller.Velocity < 4f)
