@@ -2799,10 +2799,6 @@ PrefabInstance:
       value: Receiver
       objectReference: {fileID: 0}
     - target: {fileID: 3775587861803709865, guid: 817e9dc01e8b69c469c43688a930e05b, type: 3}
-      propertyPath: Gear
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3775587861803709865, guid: 817e9dc01e8b69c469c43688a930e05b, type: 3}
       propertyPath: clientDiscovery
       value: 
       objectReference: {fileID: 1632944761}

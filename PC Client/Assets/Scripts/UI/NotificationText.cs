@@ -32,7 +32,7 @@ public class NotificationText : MonoBehaviour
         rectTransform.anchoredPosition = new Vector2(0, 50);
         s = DOTween.Sequence()
                             .Append(rectTransform.DOAnchorPos(new Vector2(0, -50), 0.5f))
-                            .AppendInterval(0.5f)
+                            .AppendInterval(2f)
                             .Append(rectTransform.DOAnchorPos(new Vector2(0, 50), 0.5f))
                             .AppendCallback(() => gameObject.SetActive(false));
     }

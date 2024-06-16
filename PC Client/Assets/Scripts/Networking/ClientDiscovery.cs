@@ -24,6 +24,10 @@ public class ClientDiscovery : MonoBehaviour
         string serverMessage = Encoding.UTF8.GetString(receivedData);
         //Debug.Log("Discovered server: " + serverMessage + " at " + endPoint.Address.ToString());
         receiver.endPoint = new IPEndPoint(endPoint.Address, receiver.PORT);
+
+        var ackEndpoint = new IPEndPoint(endPoint.Address, 47778);
+        byte[] ackData = Encoding.UTF8.GetBytes("Connected");
+        udpClient.Send(ackData, ackData.Length, ackEndpoint);
         Debug.Log("Connect to " + serverMessage);
         NotificationText.Instance.Play($"Connect to {serverMessage}");
         //udpClient.BeginReceive(new AsyncCallback(OnReceive), null); // Listen for next broadcast

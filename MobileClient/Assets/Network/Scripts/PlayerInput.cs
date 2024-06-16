@@ -10,7 +10,7 @@ public class PlayerInput : MonoBehaviour
 {
     public static PlayerInput Instance;
     public int PORT = 44231;
-    public string IPString;
+    //public string IPString;
     private UdpClient udpClient;
     public IPEndPoint endPoint;
 
@@ -28,7 +28,7 @@ public class PlayerInput : MonoBehaviour
     private void Start()
     {
         udpClient = new UdpClient();
-        endPoint = new IPEndPoint(IPAddress.Broadcast, PORT); // Port for discovery
+        //endPoint = new IPEndPoint(IPAddress.Broadcast, PORT); // Port for discovery
     }
 
     private void Update()
