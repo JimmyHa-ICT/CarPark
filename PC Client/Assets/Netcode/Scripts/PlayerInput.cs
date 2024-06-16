@@ -37,6 +37,7 @@ public class PlayerInput : MonoBehaviour
         udpClient = new UdpClient(PORT); // Port for discovery
         endPoint = new IPEndPoint(IPAddress.Any, 0);
         udpClient.BeginReceive(new AsyncCallback(OnReceive), null);
+        Debug.Log(GetLocalIPAddress());
     }
 
     private void Update()
@@ -74,5 +75,20 @@ public class PlayerInput : MonoBehaviour
         BrakePressed = message.BrakePressed;
         Gear = message.Gear;
         WheelInput = message.WheelInput;
+    }
+
+    public string GetLocalIPAddress()
+    {
+        //string ipAddress;
+        var host = Dns.GetHostEntry(Dns.GetHostName());
+        foreach (var ip in host.AddressList)
+        {
+            if (ip.AddressFamily == AddressFamily.InterNetwork)
+            {
+                //ipAddress = ip.ToString();
+                return ip.ToString();
+            }
+        }
+        throw new System.Exception("No network adapters with an IPv4 address in the system!");
     }
 }

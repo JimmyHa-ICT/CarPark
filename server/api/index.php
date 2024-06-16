@@ -7,10 +7,30 @@
 		Login($_POST["username"], $_POST["password"]);
 	}
 
-	function Login($username, $password){
+	function Login($username, $password)
+	{
 		GLOBAL $con;
 
 		$sql = "SELECT id,username FROM users WHERE username=? AND password=?";
+		$st=$con->prepare($sql);
+
+		$st->execute(array($username, sha1($password)));//encrypt password
+		$all=$st->fetchAll();
+		if (count($all) == 1){
+			echo "SERVER: ID#".$all[0]["id"]." - ".$all[0]["username"];
+			exit();
+		}
+
+		//if username or password are empty strings
+		echo "SERVER: error, invalid username or password";
+		exit();
+	}
+
+	function Signup($username, $password, $role)
+	{
+		GLOBAL $con;
+
+		$sql = "INSERT INTO users (`username`, `password`) VALUES ('?', sha1('?'))";
 		$st=$con->prepare($sql);
 
 		$st->execute(array($username, sha1($password)));//encrypt password

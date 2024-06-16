@@ -17,12 +17,15 @@ public class CarInput : MonoBehaviourPun
             return;
         }
 
-        //if (Input.GetKey(KeyCode.Space))
-        //{
-        //    carController.Throtte();
-        //}
-        //if (Input.GetKey(KeyCode.C))
-        //    carController.Brake();
+#if UNITY_EDITOR
+        if (Input.GetKey(KeyCode.Space))
+        {
+            carController.Throtte();
+        }
+        if (Input.GetKey(KeyCode.C))
+            carController.Brake();
+#endif
+
         if (PlayerInput.Instance.ThrottlePressed)
         {
             Debug.Log("Throttle");
@@ -41,13 +44,16 @@ public class CarInput : MonoBehaviourPun
             return;
         }
 
-        //carController.Steer(Input.GetAxis("Horizontal") * 3);
+#if UNITY_EDITOR
+        carController.Steer(Input.GetAxis("Horizontal") * 3);
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            carController.fwMode = -carController.fwMode;
+            //CanvasManager.SharedInstance.SetGearImage(fwMode);
+        }
+#endif
         carController.Steer(PlayerInput.Instance.WheelInput * 3);
-        //if (Input.GetKeyDown(KeyCode.R))
-        //{
-        //    carController.fwMode = -carController.fwMode;
-        //    //CanvasManager.SharedInstance.SetGearImage(fwMode);
-        //}
+        
         carController.fwMode = PlayerInput.Instance.Gear;
     }
 }
