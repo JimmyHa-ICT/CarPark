@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Photon.Pun;
 
 public class UiLobby : UiBase
 {
@@ -27,6 +28,7 @@ public class UiLobby : UiBase
     {
         base.Show();
         Statistic.Init();
+        StartButton.gameObject.SetActive(PhotonNetwork.IsConnected);
     }
 
     private void OnClickBtnStart()
