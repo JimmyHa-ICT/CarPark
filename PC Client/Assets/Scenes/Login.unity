@@ -2366,6 +2366,8 @@ MonoBehaviour:
   progressCircle: {fileID: 1190068041}
   loginButton: {fileID: 2042325629}
   url: http://127.0.0.1/unity/api/index.php
+  sessionUrl: http://127.0.0.1/unity/api/session.php
+  metricUrl: http://127.0.0.1/unity/api/metric.php
 --- !u!114 &2141276921
 MonoBehaviour:
   m_ObjectHideFlags: 0

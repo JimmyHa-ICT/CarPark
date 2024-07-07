@@ -42,6 +42,9 @@ public class PlayerInput : MonoBehaviour
 
     private void Update()
     {
+        if (endPoint == null)
+            return;
+
         if (endPoint.Address != IPAddress.Any)
         {
             time += Time.deltaTime;

@@ -24,6 +24,7 @@ public class UIEndWin : UiBase
 
     private void ShowTimeWin()
     {
+        Server.Instance.LogMetric();
         txtTime.gameObject.SetActive(true);
         txtTime.text = $"You take {Statistic.GetField("time")} seconds to win";
     }    

@@ -34,6 +34,7 @@ public class UiLobby : UiBase
     private void OnClickBtnStart()
     {
         Launcher.JoinRoom();
+        Server.Instance.LogNewSession();
         Hide();
     }
 

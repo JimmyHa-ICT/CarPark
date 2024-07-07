@@ -24,16 +24,17 @@ public class UIEndLose : UiBase
 
     private void ShowReasonLose()
     {
+        Server.Instance.LogMetric();
         txtReason.gameObject.SetActive(true);
         switch (Statistic.GetField("reason_lose"))
         {
-            case 0:
+            case 1:
                 txtReason.text = "You hit the wall!";
                 break;
-            case 1:
+            case 2:
                 txtReason.text = "You hit other car!";
                 break;
-            case 2:
+            case 3:
                 txtReason.text = "You hit the pedestrian!";
                 break;
         }

@@ -14,15 +14,15 @@ public class CollisionHandler : MonoBehaviourPun
         {
             if (collision.collider.CompareTag("Wall"))
             {
-                Statistic.SetField("reason_lose", 0);
+                Statistic.SetField("reason_lose", 1);
             }
             else if (collision.collider.CompareTag("Car"))
             {
-                Statistic.SetField("reason_lose", 1);
+                Statistic.SetField("reason_lose", 2);
             }
             else if (collision.collider.CompareTag("Human"))
             {
-                Statistic.SetField("reason_lose", 2);
+                Statistic.SetField("reason_lose", 3);
             }
             Debug.Log("Hit here!!!");
             //GetComponent<CarController>().PositionLogger.LogWinLose(0);
@@ -40,15 +40,15 @@ public class CollisionHandler : MonoBehaviourPun
         {
             if (collision.CompareTag("Wall"))
             {
-                Statistic.SetField("reason_lose", 0);
+                Statistic.SetField("reason_lose", 1);
             }    
             else if (collision.CompareTag("Car"))
             {
-                Statistic.SetField("reason_lose", 1);
+                Statistic.SetField("reason_lose", 2);
             }
             else if (collision.CompareTag("Human"))
             {
-                Statistic.SetField("reason_lose", 2);
+                Statistic.SetField("reason_lose", 3);
             }
             Debug.Log(Statistic.GetField("reason_lose"));
             //GetComponent<CarController>().PositionLogger.LogWinLose(0);

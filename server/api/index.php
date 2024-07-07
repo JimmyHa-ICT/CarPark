@@ -11,7 +11,7 @@
 	{
 		GLOBAL $con;
 
-		$sql = "SELECT id,username FROM users WHERE username=? AND password=?";
+		$sql = "SELECT id,username FROM user WHERE username=? AND password=?";
 		$st=$con->prepare($sql);
 
 		$st->execute(array($username, sha1($password)));//encrypt password
@@ -36,7 +36,7 @@
 		}
 	
 		// Check if username already exists
-		$sql = "SELECT id FROM users WHERE username=?";
+		$sql = "SELECT id FROM user WHERE username=?";
 		$st = $con->prepare($sql);
 		$st->execute(array($username));
 		$all = $st->fetchAll();
@@ -46,7 +46,7 @@
 		}
 	
 		// Insert new user
-		$sql = "INSERT INTO users (username, password) VALUES (?, ?)";
+		$sql = "INSERT INTO user (username, password) VALUES (?, ?)";
 		$st = $con->prepare($sql);
 		$encryptedPassword = sha1($password); // Encrypt password
 		$st->execute(array($username, $encryptedPassword));
@@ -68,14 +68,14 @@
 		}
 	
 		// Check if the user exists and verify the password
-		$sql = "SELECT id, password FROM users WHERE username=?";
+		$sql = "SELECT id, password FROM user WHERE username=?";
 		$st = $con->prepare($sql);
 		$st->execute(array($username));
 		$user = $st->fetch();
 	
 		if ($user && password_verify($password, $user['password'])) {
 			// Delete the user
-			$sql = "DELETE FROM users WHERE id=?";
+			$sql = "DELETE FROM user WHERE id=?";
 			$st = $con->prepare($sql);
 			$st->execute(array($user['id']));
 	
@@ -99,7 +99,7 @@
 		}
 	
 		// Check if the user exists and verify the current password
-		$sql = "SELECT id FROM users WHERE username=? AND password=?";
+		$sql = "SELECT id FROM user WHERE username=? AND password=?";
 		$st = $con->prepare($sql);
 		$st->execute(array($username, sha1($currentPassword))); // Encrypt current password with SHA-1
 		$user = $st->fetch();
@@ -109,7 +109,7 @@
 			$encryptedNewPassword = sha1($newPassword);
 	
 			// Update the user's password
-			$sql = "UPDATE users SET password=? WHERE id=?";
+			$sql = "UPDATE user SET password=? WHERE id=?";
 			$st = $con->prepare($sql);
 			$st->execute(array($encryptedNewPassword, $user['id']));
 	
@@ -122,10 +122,40 @@
 			echo "SERVER: error, invalid username or current password";
 		}
 	}
+
+	function insertSession($username, $startTime, $endTime, $result) {
+		GLOBAL $con;
 	
-
-	//if username or password is null (not set)
-	echo "SERVER: error, enter a valid username & password";
-
-	//exit():  means end server connection (don't execute the rest)
+		// Input validation
+		if (empty($username) || empty($startTime) || empty($endTime) || empty($result)) {
+			echo "SERVER: error, invalid input";
+			exit();
+		}
+	
+		// Check if username exists
+		$sql = "SELECT ID FROM User WHERE Username=?";
+		$st = $con->prepare($sql);
+		$st->execute(array($username));
+		$all = $st->fetchAll();
+		if (count($all) == 0) {
+			echo "SERVER: error, username not found";
+			exit();
+		}
+	
+		$userId = $all[0]['ID'];
+	
+		// Insert new session
+		$sql = "INSERT INTO Session (UserID, StartTime, EndTime, Result) VALUES (?, ?, ?, ?)";
+		$st = $con->prepare($sql);
+		$st->execute(array($userId, $startTime, $endTime, $result));
+	
+		if ($st->rowCount() == 1) {
+			echo "SERVER: Session insertion successful";
+		} else {
+			echo "SERVER: error, session insertion failed";
+		}
+	}
+	
+	// Example usage
+	insertSession('hung', '2024-07-06 10:00:00', '2024-07-06 11:00:00', 'Success');
 ?>
