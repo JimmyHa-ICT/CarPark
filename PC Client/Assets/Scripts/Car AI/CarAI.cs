@@ -159,13 +159,13 @@ namespace Carpark.AI.Agent
         public RaycastHit2D CheckObscuring(float length = 1)
         {
             Physics2D.queriesHitTriggers = true;
-            Debug.DrawRay(transform.position + transform.up * 0.27f + m_controller.fwMode * transform.right * 1.5f, m_controller.fwMode * transform.right * length, Color.red);
-            Debug.DrawRay(transform.position - transform.up * 0.27f + m_controller.fwMode * transform.right * 1.5f, m_controller.fwMode * transform.right * length, Color.red);
-            var right = Physics2D.Raycast(transform.position + transform.up * 0.27f + m_controller.fwMode * transform.right * 1.5f,
+            Debug.DrawRay(transform.position + transform.up * 0.3f + m_controller.fwMode * transform.right * 1.5f, m_controller.fwMode * transform.right * length, Color.red);
+            Debug.DrawRay(transform.position - transform.up * 0.3f + m_controller.fwMode * transform.right * 1.5f, m_controller.fwMode * transform.right * length, Color.red);
+            var right = Physics2D.Raycast(transform.position + transform.up * 0.3f + m_controller.fwMode * transform.right * 1.5f,
                                           m_controller.fwMode * transform.right * 2,
                                           length,
                                           LayerMask.GetMask("Cars", "Human", "Default", "Environment"));
-            var left = Physics2D.Raycast(transform.position - transform.up * 0.27f + m_controller.fwMode * transform.right * 1.5f,
+            var left = Physics2D.Raycast(transform.position - transform.up * 0.3f + m_controller.fwMode * transform.right * 1.5f,
                                          m_controller.fwMode * transform.right * 2,
                                          length,
                                          LayerMask.GetMask("Cars", "Human", "Default", "Environment"));

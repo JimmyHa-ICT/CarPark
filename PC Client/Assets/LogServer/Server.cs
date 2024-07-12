@@ -31,7 +31,7 @@ public class Server : MonoBehaviour
 	WWWForm form;
 
 	public static Server Instance;
-	public string UserName => PlayerPrefs.GetString("username");
+	public string UserName/* => PlayerPrefs.GetString("username")*/;
 
 
     private void Awake()
@@ -87,7 +87,9 @@ public class Server : MonoBehaviour
 		w.Dispose ();
 	}
 
+#if UNITY_EDDITOR
 	[Button]
+#endif
 	public void LogNewSession()
     {
 		StartCoroutine(LogNewSession(System.DateTime.UtcNow, System.DateTime.UtcNow));
@@ -133,7 +135,9 @@ public class Server : MonoBehaviour
 		w.Dispose();
 	}
 
+#if UNITY_EDDITOR
 	[Button]
+#endif
 	public void LogMetric()
     {
 		StartCoroutine(ILogMetric());
@@ -187,7 +191,8 @@ public class Server : MonoBehaviour
 
 	private void SaveSession()
     {
-		PlayerPrefs.SetString("username", username.text);
+		//PlayerPrefs.SetString("username", username.text);
+		UserName = username.text;
     }	
 	
 	private void LoadStartScene()

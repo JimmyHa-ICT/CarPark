@@ -259,7 +259,7 @@ MonoBehaviour:
   Group: 0
   prefixField: -1
   Synchronization: 3
-  OwnershipTransfer: 0
+  OwnershipTransfer: 1
   observableSearch: 2
   ObservedComponents:
   - {fileID: 187279551}
@@ -319,7 +319,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.18
+  m_Radius: 0.2
 --- !u!212 &187279553
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -696,7 +696,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.18
+  m_Radius: 0.2
 --- !u!212 &422378997
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1035,7 +1035,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: -0.00000023841858}
   serializedVersion: 2
-  m_Radius: 0.18
+  m_Radius: 0.2
 --- !u!212 &481649814
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -4657,7 +4657,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.18
+  m_Radius: 0.2
 --- !u!212 &1111619702
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -5273,7 +5273,7 @@ MonoBehaviour:
   m_Intensity: 1
   m_LightVolumeIntensity: 0
   m_LightVolumeIntensityEnabled: 0
-  m_ApplyToSortingLayers: 00000000
+  m_ApplyToSortingLayers: 00000000a98d0ea5
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 0
@@ -5617,7 +5617,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: -0.000000059604645, y: 0}
   serializedVersion: 2
-  m_Radius: 0.18
+  m_Radius: 0.2
 --- !u!114 &1577664243
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6106,7 +6106,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.18
+  m_Radius: 0.2
 --- !u!212 &1895638443
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -6233,7 +6233,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: -0.000000059604645, y: 0}
   serializedVersion: 2
-  m_Radius: 0.18
+  m_Radius: 0.2
 --- !u!212 &1900417048
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -6686,7 +6686,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.18
+  m_Radius: 0.2
 --- !u!114 &2082045745
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7025,7 +7025,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.18
+  m_Radius: 0.2
 --- !u!212 &2147458987
 SpriteRenderer:
   m_ObjectHideFlags: 0

@@ -12,10 +12,19 @@ public class CarSkin : MonoBehaviourPun
     // Start is called before the first frame update
     void Start()
     {
+        Init();
+    }
+
+    public void Init()
+    {
+        MaterialPropertyBlock block = new MaterialPropertyBlock();
         if (isAI)
         {
             var skinList = LocalDataManager.Instance.CarSkinList.Skins;
             spriteRenderer.sprite = skinList[Random.Range(0, skinList.Length)];
+            spriteRenderer.GetPropertyBlock(block);
+            block.SetColor("_Color", Color.red);
+            spriteRenderer.SetPropertyBlock(block);
             return;
         }
 
@@ -26,6 +35,15 @@ public class CarSkin : MonoBehaviourPun
             {
                 var skinList = LocalDataManager.Instance.CarSkinList.Skins;
                 spriteRenderer.sprite = skinList[i % skinList.Length];
+                spriteRenderer.GetPropertyBlock(block);
+                block.SetColor("_Color", Color.green);
+                spriteRenderer.SetPropertyBlock(block);
+            }
+            else
+            {
+                spriteRenderer.GetPropertyBlock(block);
+                block.SetColor("_Color", Color.red);
+                spriteRenderer.SetPropertyBlock(block);
             }
         }
     }
