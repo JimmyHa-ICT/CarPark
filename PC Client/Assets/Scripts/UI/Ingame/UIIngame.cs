@@ -10,12 +10,14 @@ public class UIIngame : UiBase
     public UiPlayerSlot playerSlotPfb;
     public List<UiPlayerSlot> PlayerSlots;
     public Transform groupSlots;
+    public Button BtnPause;
 
     private void Start()
     {
         InitializePlayerSlots();
         EventBroker.Instance.OnOtherPlayerEnterRoom.AddListener(AddSlot);
         EventBroker.Instance.OnOtherPlayerLeftRoom.AddListener(RemoveSlot);
+        BtnPause.onClick.AddListener(OnClickBtnPause);
     }
 
     private void Update()
@@ -70,4 +72,9 @@ public class UIIngame : UiBase
         PlayerSlots.Add(Instantiate(playerSlotPfb, groupSlots));
         UpdatePlayerSlots();
     }    
+
+    private void OnClickBtnPause()
+    {
+        UiController.Instance.OpenUIPause();
+    }
 }

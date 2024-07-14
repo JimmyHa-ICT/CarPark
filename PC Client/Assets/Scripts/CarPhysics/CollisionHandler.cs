@@ -14,20 +14,23 @@ public class CollisionHandler : MonoBehaviourPun
         {
             if (collision.collider.CompareTag("Wall"))
             {
-                Statistic.SetField("reason_lose", 1);
+                int cls = Statistic.GetField("collision_wall");
+                Statistic.SetField("collision_wall", cls + 1);
             }
             else if (collision.collider.CompareTag("Car"))
             {
-                Statistic.SetField("reason_lose", 2);
+                int cls = Statistic.GetField("collision_car");
+                Statistic.SetField("collision_car", cls + 1);
             }
             else if (collision.collider.CompareTag("Human"))
             {
-                Statistic.SetField("reason_lose", 3);
+                int cls = Statistic.GetField("collision_human");
+                Statistic.SetField("collision_human", cls + 1);
             }
             Debug.Log("Hit here!!!");
             //GetComponent<CarController>().PositionLogger.LogWinLose(0);
-            Launcher.ExitRoom();
-            UiController.Instance.OpenUiEndLose();
+            //Launcher.ExitRoom();
+            //UiController.Instance.OpenUiEndLose();
         }
     }
 
@@ -40,20 +43,23 @@ public class CollisionHandler : MonoBehaviourPun
         {
             if (collision.CompareTag("Wall"))
             {
-                Statistic.SetField("reason_lose", 1);
+                int cls = Statistic.GetField("collision_wall");
+                Statistic.SetField("collision_wall", cls + 1);
             }    
             else if (collision.CompareTag("Car"))
             {
-                Statistic.SetField("reason_lose", 2);
+                int cls = Statistic.GetField("collision_car");
+                Statistic.SetField("collision_car", cls + 1);
             }
             else if (collision.CompareTag("Human"))
             {
-                Statistic.SetField("reason_lose", 3);
+                int cls = Statistic.GetField("collision_human");
+                Statistic.SetField("collision_human", cls + 1);
             }
             Debug.Log(Statistic.GetField("reason_lose"));
             //GetComponent<CarController>().PositionLogger.LogWinLose(0);
-            Launcher.ExitRoom();
-            UiController.Instance.OpenUiEndLose();
+            //Launcher.ExitRoom();
+            //UiController.Instance.OpenUiEndLose();
         }
 
         else if (collision.CompareTag("Gate"))

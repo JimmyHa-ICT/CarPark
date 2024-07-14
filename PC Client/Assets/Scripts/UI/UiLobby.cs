@@ -28,7 +28,7 @@ public class UiLobby : UiBase
     {
         base.Show();
         Statistic.Init();
-        StartButton.gameObject.SetActive(PhotonNetwork.IsMasterClient);
+        StartButton.gameObject.SetActive(PhotonNetwork.IsConnectedAndReady);
     }
 
     private void OnClickBtnStart()

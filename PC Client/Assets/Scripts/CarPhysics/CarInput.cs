@@ -26,15 +26,15 @@ public class CarInput : MonoBehaviourPun
             carController.Brake();
 #endif
 
-        if (PlayerInput.Instance.ThrottlePressed)
-        {
-            Debug.Log("Throttle");
-            carController.Throtte();
-        }    
-        if (PlayerInput.Instance.BrakePressed)
-        {
-            carController.Brake();
-        }
+        //if (PlayerInput.Instance.ThrottlePressed)
+        //{
+        //    Debug.Log("Throttle");
+        //    carController.Throtte();
+        //}    
+        //if (PlayerInput.Instance.BrakePressed)
+        //{
+        //    carController.Brake();
+        //}
     }
 
     private void Update()
@@ -52,8 +52,8 @@ public class CarInput : MonoBehaviourPun
             //CanvasManager.SharedInstance.SetGearImage(fwMode);
         }
 #endif
-        carController.Steer(PlayerInput.Instance.WheelInput * 3);
+        //carController.Steer(PlayerInput.Instance.WheelInput * 3);
         
-        carController.fwMode = PlayerInput.Instance.Gear;
+        //carController.fwMode = PlayerInput.Instance.Gear;
     }
 }

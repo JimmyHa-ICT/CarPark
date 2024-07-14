@@ -8,6 +8,7 @@ public class UiController : MonoBehaviour
     public UIEndWin UIEndWin;
     public UIEndLose UIEndLose;
     public UIIngame UIIngame;
+    public UiBase UIPause;
 
     public static UiController Instance;
 
@@ -53,5 +54,10 @@ public class UiController : MonoBehaviour
     {
         CloseAll();
         UIIngame.Show();
+    }
+
+    public void OpenUIPause()
+    {
+        UIPause.Show();
     }
 }
