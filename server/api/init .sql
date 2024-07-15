@@ -34,3 +34,14 @@ INSERT INTO User (Username, Password, Role) VALUES
 ('hung', SHA1('123456'), 'Admin'),
 ('johndoe', SHA1('123456'), 'User'),
 ('johnsmith', SHA1('123456'), 'User');
+
+-- Create Collisions table
+CREATE TABLE Collisions ( 
+    collisionID INT AUTO_INCREMENT PRIMARY KEY, 
+    sessionID INT NOT NULL, 
+    typeOfCollision INT NOT NULL, 
+    collideLatitude DOUBLE NOT NULL, 
+    collideLongitude DOUBLE NOT NULL, 
+    mapID INT NOT NULL,
+    FOREIGN KEY (sessionID) REFERENCES session(ID) 
+);

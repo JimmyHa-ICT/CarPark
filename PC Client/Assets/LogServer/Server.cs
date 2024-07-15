@@ -27,6 +27,7 @@ public class Server : MonoBehaviour
 	[SerializeField] string url;
 	[SerializeField] string sessionUrl;
 	[SerializeField] string metricUrl;
+	[SerializeField] string collisionUrl;
 
 	WWWForm form;
 
@@ -135,6 +136,49 @@ public class Server : MonoBehaviour
 		w.Dispose();
 	}
 
+	public void UpdateSession()
+    {
+		StartCoroutine(IUpdateSession());
+	}
+
+	IEnumerator IUpdateSession()
+    {
+		form = new WWWForm();
+
+		form.AddField("session_id", Statistic.GetField("session_id"));
+		//form.AddField("start_time", startTime.ToString("yyyy-MM-dd HH:mm:ss"));
+		form.AddField("end_time", System.DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss"));
+		form.AddField("result", Result.Success.ToString());
+
+
+		WWW w = new WWW(sessionUrl, form);
+		yield return w;
+
+		if (w.error != null)
+		{
+			//errorMessages.text = "404 not found!";
+			Debug.Log("<color=red>" + w.text + "</color>");//error
+		}
+		else
+		{
+			if (w.isDone)
+			{
+				if (w.text.Contains("error"))
+				{
+					//errorMessages.text = "some error occur";
+					Debug.Log("<color=red>" + w.text + "</color>");//error
+				}
+				else
+				{
+					Debug.Log("<color=green>" + w.text + "</color>");
+					Debug.Log("Update session successfully");
+				}
+			}
+		}
+
+		w.Dispose();
+	}
+
 #if UNITY_EDDITOR
 	[Button]
 #endif
@@ -151,8 +195,50 @@ public class Server : MonoBehaviour
         form.AddField("time_taken", Statistic.GetField("time"));
 		form.AddField("collision", Statistic.GetField("reason_lose"));
 
-
 		WWW w = new WWW(metricUrl, form);
+		yield return w;
+
+		if (w.error != null)
+		{
+			//errorMessages.text = "404 not found!";
+			Debug.Log("<color=red>" + w.text + "</color>");//error
+		}
+		else
+		{
+			if (w.isDone)
+			{
+				if (w.text.Contains("error"))
+				{
+					//errorMessages.text = "some error occur";
+					Debug.Log("<color=red>" + w.text + "</color>");//error
+				}
+				else
+				{
+					Debug.Log("<color=green>" + w.text + "</color>");
+					Debug.Log("Log metric successfully");
+				}
+			}
+		}
+
+		w.Dispose();
+	}
+
+	public void LogCollision(CollisionType type, Vector2 pos, int mapID = 1)
+    {
+		StartCoroutine(ILogCollision(type, pos, mapID));
+    }	
+	
+	IEnumerator ILogCollision(CollisionType type, Vector2 pos, int mapID = 1)
+    {
+		form = new WWWForm();
+		Debug.Log((int) type);        
+		form.AddField("sessionID", Statistic.GetField("session_id"));
+		form.AddField("typeOfCollision", (int) type);
+		form.AddField("collideLatitude", pos.x.ToString());
+		form.AddField("collideLongitude", pos.y.ToString());
+		form.AddField("mapID", mapID);
+
+		WWW w = new WWW(collisionUrl, form);
 		yield return w;
 
 		if (w.error != null)
@@ -206,4 +292,11 @@ public enum Result
 	Success = 0,
 	Failure = 1,
 	Pending = 2,
+}
+
+public enum CollisionType
+{
+	Wall = 1,
+	Cars = 2,
+	Human = 3
 }

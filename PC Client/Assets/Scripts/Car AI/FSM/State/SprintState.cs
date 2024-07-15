@@ -7,7 +7,6 @@ namespace Carpark.AI.FSM
 {
     public class SprintState : BaseState
     {
-        private CarController m_controller;
         private CarAI carAI;
         private Vector3 destination;
 

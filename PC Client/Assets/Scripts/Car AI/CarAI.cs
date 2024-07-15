@@ -44,6 +44,7 @@ namespace Carpark.AI.Agent
             //transform.position = RoadWaypoints.Instance.InGate.position;
             //transform.eulerAngles = new Vector3(0, 0, 180);
             destination = Path[0];
+            FSM.Init();
         }
 
         private FSM.FSM GetFSMMoveInParkingLot()
@@ -68,10 +69,12 @@ namespace Carpark.AI.Agent
         {
             var sprintState = new SprintState(m_controller);
             var dribbleState = new DribbleState(m_controller);
+            var perpendicularOut = new PerpendicularOutState(m_controller);
 
+            perpendicularOut.Transitions.Add(new PerpendicularOutExitTransition(sprintState, this));
             sprintState.Transitions.Add(new DribbleTransition(dribbleState, this));
             dribbleState.Transitions.Add(new SprintTransition(sprintState, this));
-            List<BaseState> states = new List<BaseState>() { sprintState, dribbleState };
+            List<BaseState> states = new List<BaseState>() {perpendicularOut, sprintState, dribbleState };
             var outFSM = new FSM.FSM(states);
             return outFSM;
         }

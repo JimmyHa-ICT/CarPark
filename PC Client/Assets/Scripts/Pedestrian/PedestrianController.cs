@@ -10,6 +10,8 @@ public class PedestrianController : MonoBehaviourPun
     [SerializeField] private float velocity = 2;
     private int currentWaypoint;
 
+    public float vel;
+
     private void Awake()
     {
         if (PhotonNetwork.PlayerList.Length > 1 && photonView.IsMine)
@@ -35,11 +37,23 @@ public class PedestrianController : MonoBehaviourPun
         }
         //transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(waypoints[currentWaypoint].position - transform.position), 360 * Time.deltaTime);
         //transform.position += -transform.up * velocity * Time.deltaTime;
-        float vel = velocity;
+        vel = velocity;
+        var collider = CheckObscuring().collider;
         if (CheckObscuring().collider != null)
         {
-            Debug.Log(CheckObscuring().collider);
-            vel = 0;
+            Debug.Log(collider);
+            var car = collider.GetComponent<CarController>();
+            var pedestrian = collider.GetComponent<PedestrianController>();
+            if (car != null && car.Velocity == 0)
+            {
+                vel = velocity;
+            }
+            else if (pedestrian != null && pedestrian.vel == 0)
+            {
+                vel = velocity;
+            }
+            else
+                vel = 0;
         }
         Vector3 direction = waypoints[currentWaypoint].position - transform.position;
         transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg + 90);
@@ -48,10 +62,10 @@ public class PedestrianController : MonoBehaviourPun
 
     private RaycastHit2D CheckObscuring()
     {
-        Debug.DrawRay(transform.position + transform.right * 0.3f, -transform.up, Color.red);
-        Debug.DrawRay(transform.position - transform.right * 0.3f, -transform.up, Color.red);
-        var right = Physics2D.Raycast(transform.position + transform.right * 0.27f, -transform.up, 1, LayerMask.GetMask("Cars", "Human"));
-        var left = Physics2D.Raycast(transform.position - transform.right * 0.27f, -transform.up, 1, LayerMask.GetMask("Cars", "Human"));
+        Debug.DrawRay(transform.position + transform.right * 0.31f, -transform.up * .75f, Color.red);
+        Debug.DrawRay(transform.position - transform.right * 0.31f, -transform.up * .75f, Color.red);
+        var right = Physics2D.Raycast(transform.position + transform.right * 0.31f, -transform.up, .75f, LayerMask.GetMask("Cars", "Human"));
+        var left = Physics2D.Raycast(transform.position - transform.right * 0.31f, -transform.up, .75f, LayerMask.GetMask("Cars", "Human"));
 
         if (right.collider == null && left.collider == null)
         {

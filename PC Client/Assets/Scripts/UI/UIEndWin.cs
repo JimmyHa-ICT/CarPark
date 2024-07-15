@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using TMPro;
 
 public class UIEndWin : UiBase
 {
     public Button btnHome;
-    public Text txtTime;
-    public Text txtCollision;
+    public TMP_Text txtTime;
+    public TMP_Text txtCollision;
 
     // Start is called before the first frame update
     void Start()
@@ -26,24 +27,25 @@ public class UIEndWin : UiBase
     private void ShowTimeWin()
     {
         Server.Instance.LogMetric();
+        Server.Instance.UpdateSession();
         txtTime.gameObject.SetActive(true);
         txtCollision.gameObject.SetActive(true);
-        txtTime.text = $"Time take {Statistic.GetField("time")} seconds";
+        txtTime.text = $"{Statistic.GetField("time")} seconds";
         int collision_wall = Statistic.GetField("collision_wall");
         int collision_car = Statistic.GetField("collision_car");
         int collision_human = Statistic.GetField("collision_human");
         int collision = collision_wall + collision_car + collision_human;
         if (collision == 0)
-            txtCollision.text = $"Collision {collision}\n";
+            txtCollision.text = $"Collision <pos=90%>{collision}\n";
         else
         {
-            string str = $"Total collision {collision}\n";
+            string str = $"Total collision <pos=90%>{collision}\n";
             if (collision_human > 0)
-                str += $"\tCollide with human: {collision_human}\n";
+                str += $"Collide with human: <pos=90%>{collision_human}\n";
             if (collision_car > 0)
-                str += $"\tCollide with car: {collision_car}\n";
+                str += $"Collide with car: <pos=90%>{collision_car}\n";
             if (collision_wall > 0)
-                str += $"\tCollide with wall: {collision_wall}\n";
+                str += $"Collide with wall: <pos=90%>{collision_wall}\n";
             txtCollision.text = str;
         }
     }    

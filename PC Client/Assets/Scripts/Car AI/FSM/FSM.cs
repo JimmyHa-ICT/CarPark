@@ -20,6 +20,7 @@ namespace Carpark.AI.FSM
         public void Init()
         {
             CurrentState = States[0];
+            CurrentState.OnEnter();
         }
 
         public void Update()

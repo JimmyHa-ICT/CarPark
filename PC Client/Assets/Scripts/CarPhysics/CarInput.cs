@@ -6,6 +6,7 @@ using Photon.Pun;
 public class CarInput : MonoBehaviourPun
 {
     [SerializeField] private CarController carController;
+    public bool isMobileMode;
     private bool isThrottle = false;
     private bool isBrake = false;
 
@@ -17,24 +18,27 @@ public class CarInput : MonoBehaviourPun
             return;
         }
 
-#if UNITY_EDITOR
-        if (Input.GetKey(KeyCode.Space))
+        if (isMobileMode)
         {
-            carController.Throtte();
+            if (PlayerInput.Instance.ThrottlePressed)
+            {
+                Debug.Log("Throttle");
+                carController.Throtte();
+            }
+            if (PlayerInput.Instance.BrakePressed)
+            {
+                carController.Brake();
+            }
         }
-        if (Input.GetKey(KeyCode.C))
-            carController.Brake();
-#endif
-
-        //if (PlayerInput.Instance.ThrottlePressed)
-        //{
-        //    Debug.Log("Throttle");
-        //    carController.Throtte();
-        //}    
-        //if (PlayerInput.Instance.BrakePressed)
-        //{
-        //    carController.Brake();
-        //}
+        else
+        {
+            if (Input.GetKey(KeyCode.Space))
+            {
+                carController.Throtte();
+            }
+            if (Input.GetKey(KeyCode.C))
+                carController.Brake();
+        }
     }
 
     private void Update()
@@ -44,16 +48,21 @@ public class CarInput : MonoBehaviourPun
             return;
         }
 
-#if UNITY_EDITOR
-        carController.Steer(Input.GetAxis("Horizontal") * 3);
-        if (Input.GetKeyDown(KeyCode.R))
+        if (isMobileMode)
         {
-            carController.fwMode = -carController.fwMode;
-            //CanvasManager.SharedInstance.SetGearImage(fwMode);
+            carController.Steer(PlayerInput.Instance.WheelInput * 3);
+
+            carController.fwMode = PlayerInput.Instance.Gear;
         }
-#endif
-        //carController.Steer(PlayerInput.Instance.WheelInput * 3);
-        
-        //carController.fwMode = PlayerInput.Instance.Gear;
+        else
+        {
+            carController.Steer(Input.GetAxis("Horizontal") * 3);
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                carController.fwMode = -carController.fwMode;
+                //CanvasManager.SharedInstance.SetGearImage(fwMode);
+            }
+        }
+
     }
 }
