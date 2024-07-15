@@ -38,6 +38,9 @@ public class CollisionHandler : MonoBehaviourPun
             //Launcher.ExitRoom();
             //UiController.Instance.OpenUiEndLose();
         }
+
+        if (GetComponent<CarInput>() != null)
+            SoundController.Instance.PlayCollisionSound();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -72,6 +75,8 @@ public class CollisionHandler : MonoBehaviourPun
             //GetComponent<CarController>().PositionLogger.LogWinLose(0);
             //Launcher.ExitRoom();
             //UiController.Instance.OpenUiEndLose();
+            if (GetComponent<CarInput>() != null)
+                SoundController.Instance.PlayCollisionSound();
         }
 
         else if (collision.CompareTag("Gate"))
@@ -79,6 +84,8 @@ public class CollisionHandler : MonoBehaviourPun
             //GetComponent<CarController>().PositionLogger.LogWinLose(1);
             Launcher.ExitRoom();
             UiController.Instance.OpenUiEndWin();
-        }    
+        }
+
+        
     }
 }

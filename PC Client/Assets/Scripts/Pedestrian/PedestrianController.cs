@@ -44,7 +44,7 @@ public class PedestrianController : MonoBehaviourPun
             Debug.Log(collider);
             var car = collider.GetComponent<CarController>();
             var pedestrian = collider.GetComponent<PedestrianController>();
-            if (car != null && car.Velocity == 0)
+            if (car != null && car.Velocity <= 0.1f)
             {
                 vel = velocity;
             }

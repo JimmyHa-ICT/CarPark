@@ -255,3 +255,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   carController: {fileID: 340848340045795163}
+  isMobileMode: 1

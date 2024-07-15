@@ -10,6 +10,11 @@ public class CarInput : MonoBehaviourPun
     private bool isThrottle = false;
     private bool isBrake = false;
 
+    public SteeringWheel wheel => UiController.Instance.UIIngame.Wheel;
+    public ThrottleButton throttleButton => UiController.Instance.UIIngame.ThrottleButton;
+    public BrakeButton brakeButton => UiController.Instance.UIIngame.BrakeButton;
+    public GearButton gearButton => UiController.Instance.UIIngame.GearButton;
+
     // Update is called once per frame
     void FixedUpdate()
     {
@@ -29,6 +34,8 @@ public class CarInput : MonoBehaviourPun
             {
                 carController.Brake();
             }
+            throttleButton.OnUpdate(PlayerInput.Instance.ThrottlePressed);
+            brakeButton.OnUpdate(PlayerInput.Instance.BrakePressed);
         }
         else
         {
@@ -38,6 +45,8 @@ public class CarInput : MonoBehaviourPun
             }
             if (Input.GetKey(KeyCode.C))
                 carController.Brake();
+            throttleButton.OnUpdate(Input.GetKey(KeyCode.Space));
+            brakeButton.OnUpdate(Input.GetKey(KeyCode.C));
         }
     }
 
@@ -51,15 +60,19 @@ public class CarInput : MonoBehaviourPun
         if (isMobileMode)
         {
             carController.Steer(PlayerInput.Instance.WheelInput * 3);
+            wheel.OnUpdate(PlayerInput.Instance.WheelInput);
 
             carController.fwMode = PlayerInput.Instance.Gear;
+            gearButton.OnUpdate(carController.fwMode);
         }
         else
         {
             carController.Steer(Input.GetAxis("Horizontal") * 3);
+            wheel.OnUpdate(Input.GetAxis("Horizontal"));
             if (Input.GetKeyDown(KeyCode.R))
             {
                 carController.fwMode = -carController.fwMode;
+                gearButton.OnUpdate(carController.fwMode);
                 //CanvasManager.SharedInstance.SetGearImage(fwMode);
             }
         }

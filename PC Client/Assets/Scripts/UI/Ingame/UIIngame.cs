@@ -11,13 +11,21 @@ public class UIIngame : UiBase
     public List<UiPlayerSlot> PlayerSlots;
     public Transform groupSlots;
     public Button BtnPause;
+    public SteeringWheel Wheel;
+    public ThrottleButton ThrottleButton;
+    public BrakeButton BrakeButton;
+    public GearButton GearButton;
 
     private void Start()
     {
-        InitializePlayerSlots();
         EventBroker.Instance.OnOtherPlayerEnterRoom.AddListener(AddSlot);
         EventBroker.Instance.OnOtherPlayerLeftRoom.AddListener(RemoveSlot);
         BtnPause.onClick.AddListener(OnClickBtnPause);
+    }
+
+    private void OnEnable()
+    {
+        InitializePlayerSlots();
     }
 
     private void Update()

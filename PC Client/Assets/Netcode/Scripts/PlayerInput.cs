@@ -78,6 +78,8 @@ public class PlayerInput : MonoBehaviour
         BrakePressed = message.BrakePressed;
         Gear = message.Gear;
         WheelInput = message.WheelInput;
+
+
     }
 
     public string GetLocalIPAddress()

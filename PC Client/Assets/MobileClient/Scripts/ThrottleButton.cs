@@ -3,17 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class ThrottleButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
+public class ThrottleButton : MonoBehaviour
 {
-    public void OnPointerDown(PointerEventData eventData)
+    public void OnUpdate(bool isPressed)
     {
-        MobileInputSender.Instance.Throttle = 1;
-        transform.localScale *= 0.9f;
-    }
-
-    public void OnPointerUp(PointerEventData eventData)
-    {
-        MobileInputSender.Instance.Throttle = 0;
-        transform.localScale /= 0.9f;
+        if (isPressed)
+            transform.localScale = Vector3.one * .9f * 4f;
+        else
+            transform.localScale = Vector3.one * 4f;
     }
 }
