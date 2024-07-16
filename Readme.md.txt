@@ -4,4 +4,5 @@ Local run Instruction:
 3. Install .apk file on your mobile. Make sure that your mobile and PC are the same LAN (Wifi, etc)
 4. Install Xampp. Copy folder server/api to the location in your PC C:\C:\xampp\htdocs\unity
 5. Open XAMPP. Start Apache server and MySQL.
-6. Open PC Client App and Mobile Client app and run.
+6. Initialize the database
+7. Open PC Client App and Mobile Client app and run.
